@@ -1,0 +1,104 @@
+<header>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top bg-light">
+        <div class="container-fluid">
+            <div class="d-block d-lg-none">
+                <div class="row">
+                    <div class="col-2">
+                        <mat-icon>home</mat-icon>
+                    </div>
+                    <div class="col-2">
+                        <mat-icon>widgets</mat-icon>
+                    </div>
+                    <div class="col-2">
+                        <mat-icon>monetization_on</mat-icon>
+                    </div>
+                    <div class="col-2">
+                        <mat-icon>not_listed_location</mat-icon>
+                    </div>
+                    <div class="col-2">
+                        <mat-icon>notification_important</mat-icon>
+                    </div>
+                    <div class="col-2">
+                        <mat-icon class="text-danger" [routerLink]="['/HomePage']">exit_to_app</mat-icon>
+                    </div>
+                </div>
+            </div>
+            <div class="d-none d-lg-block">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item active">
+                        <a class="nav-link text-center" aria-current="page" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Pricing</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <span class="btn text-danger" [routerLink]="['/HomePage']">Logout</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+<div>
+    <div>
+        <div class="row text-center mt-5 pt-3">
+            <div class="col-12">
+                <h3><i>Create your form to met your business needs</i></h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 text-center align-items-center">
+                <button class="btn btn-primary">Create Form</button>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="row text-center align-items-center mt-5 pt-4 mb-5">
+            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                <span>
+                    <h3><b>Your Forms</b></h3>
+                    <mat-icon>list_alt</mat-icon>
+                </span>
+                <span>
+                    <h1>6</h1>
+                </span>
+                <span>
+                    <h5>3 forms are active out of 6, look over <span class="text-primary cursor-pointer">Forms</span>.</h5>
+                </span>
+            </div>
+            <hr class="d-block d-md-none" />
+            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                <span>
+                    <h3><b>Form Submitions</b></h3>
+                    <mat-icon>verified_user</mat-icon>
+                </span>
+                <span>
+                    <h1>1484</h1>
+                </span>
+                <span>
+                    <h5>133 forms need to review out of 1484 go to <span class="text-primary cursor-pointer">Review Forms</span>.</h5>
+                </span>
+            </div>
+            <hr class="d-block d-md-none" />
+            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                <span>
+                    <h3><b>Average Submitions (Per Form)</b></h3>
+                    <mat-icon>bar_chart</mat-icon>
+                </span>
+                <span>
+                    <h1>247</h1>
+                </span>
+                <span>
+                    <h5><span class="text-primary cursor-pointer">Continuous FeedBack</span> form has highest number of submitions, count is 458.</h5>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
