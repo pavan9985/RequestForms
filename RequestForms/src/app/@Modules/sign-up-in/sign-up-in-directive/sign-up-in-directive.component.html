@@ -14,18 +14,19 @@
             </div>
             <div class="row bg-light pb-2">
                 <div class="col-xl-5 col-lg-6 col-md-6 col-sm-12 col-xs-12 text-center align-items-center">
-                    <mat-form-field appearance="fill">
-                        <input matInput placeholder="Email" required>
+                    <form [formGroup]="LoginForm">
+                    <mat-form-field>
+                        <input matInput  formControlName="Email" placeholder="Email" required>
                     </mat-form-field>
                     <br/>
                     <mat-form-field appearance="fill">
-                        <input matInput placeholder="Password" required>
+                        <input matInput formControlName="Password" placeholder="Password" required>
                         
                     </mat-form-field>
                     <br/>
-                        <button type="button" class="btn btn-outline-secondary">Login</button>
+                        <button type="button" class="btn btn-outline-secondary" (click)="LoginClick()">Login</button>
                         <p class="mt-2 text-primary cursor-pointer"><span (click)="disbool=false">SignUp</span> / <span>Forgot Password?</span></p>
-                    
+                    </form>
                 </div>
             </div>
         </div>
