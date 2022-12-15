@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { FormCustomizationDirectiveComponent } from '../form-customization/form-customization-directive/form-customization-directive.component';
 import { DashboardDirectiveComponent } from './dashboard-directive/dashboard-directive.component';
 
 const routes: Routes = [
@@ -10,7 +11,14 @@ const routes: Routes = [
     component : DashboardDirectiveComponent,
     children:[
       {
-        path: "main-view", component : DashboardDirectiveComponent
+        path:'FormCustomization',
+        loadChildren : () =>
+          import('../form-customization/form-customization.module').then((m) => m.FormCustomizationModule),
+      },
+      {
+        path:'UserHome',
+        loadChildren : () =>
+          import('../user-home/user-home.module').then((m) => m.UserHomeModule),
       },
     ],
   },
