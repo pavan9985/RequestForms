@@ -1,0 +1,48 @@
+<div class="mt-5 mb-2 pt-2">
+
+
+    <div>
+        <div class="row ">
+            <div class="col-12 px-5 ls-1 text-strat align-items-center">
+                <h4>Create Form Field</h4>
+                <span>We have a rule engine for every field.</span>
+            </div>
+        </div>
+        <div>
+            <div class="row">
+                <div class="col-12 text-center">
+                    <mat-form-field appearance="fill">
+                        <mat-select [(value)]="selectedIssue" placeholder="Field Type" required>
+                            <mat-option *ngFor="let FType of FieldTypes" [value]="FType.value">
+                                {{FType.viewValue}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                </div>
+            </div>
+            <div>
+                <div class="row">
+                    <div class="col-12">
+                        <span *ngIf="selectedIssue == 1" class="mx-3">
+                            <mat-checkbox [checked]="EmailCheck" (change)="CheckFunctions($event, 'Email-Format')">Email
+                                Format</mat-checkbox>
+                        </span>
+                        <span *ngIf="selectedIssue == 1" class="mx-3">
+                            <mat-checkbox [checked]="RequiredCheck"
+                                (change)="CheckFunctions($event, 'Input-Required')">Required</mat-checkbox>
+                        </span>
+                        <span *ngIf="selectedIssue == 1 && RequiredCheck" class="mx-3">
+                            <span>Length </span>
+                            <mat-slider class="example-margin" [disabled]="false" [max]="100" [min]="1" [step]="1"
+                                [discrete]="true" [showTickMarks]="false">
+                                <input value="1" matSliderStartThumb>
+                                <input value="30" matSliderEndThumb>
+                            </mat-slider>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators} from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute, Route, Router } from '@angular/router';
+import { UserModel } from 'src/app/Models/sign-up-in.model';
 import { UtilityModule } from 'src/app/Shared/utility/utility.module';
+import { HomePageDirectiveComponent } from '../../home-page/home-page-directive/home-page-directive.component';
 
 @Component({
   selector: 'app-sign-up-in-directive',
@@ -11,7 +14,7 @@ import { UtilityModule } from 'src/app/Shared/utility/utility.module';
 
 
 export class SignUpInDirectiveComponent implements OnInit {
-
+  userModel : UserModel;
   disbool : boolean;
   LoginForm! :FormGroup;
   
@@ -21,6 +24,7 @@ export class SignUpInDirectiveComponent implements OnInit {
       Password: ['', Validators.required]
     });
 
+
     this.sub = this.route.params.subscribe(params => {
      var x = params['id'];
      this.disbool = (x =="true");
@@ -29,9 +33,9 @@ export class SignUpInDirectiveComponent implements OnInit {
    
   sub: any;
   
-  constructor(private route: ActivatedRoute, private _formBuilder: FormBuilder, private utility : UtilityModule) {
+  constructor(private _snackBar: MatSnackBar,private route: ActivatedRoute,private nav: Router, private _formBuilder: FormBuilder, private utility : UtilityModule) {
     this.disbool = true;
-    
+    this.userModel ={} as UserModel;
     // console.log(this.dispalay);
    }
   
@@ -45,9 +49,20 @@ export class SignUpInDirectiveComponent implements OnInit {
 
 
   LoginClick(){
-    if(this.utility.hasValue(this.LoginForm.value.Email)){
-      console.log(this.LoginForm.value.Email);
+    if(this.utility.hasValue(this.LoginForm.value.Email) == false){
+      this.utility.AlertWarning("Enter Email");
+      return;
     }
+    if(this.utility.hasValue(this.LoginForm.value.Password) == false){
+      this.utility.AlertWarning("Enter Password");
+      return;
+    }
+    this.userModel.Email = this.LoginForm.value.Email;
+    this.userModel.Pasword = this.LoginForm.value.Email;
+    // console.log(this.userModel);
+    localStorage.setItem("UserModel", JSON.stringify(this.userModel));
+    console.log(localStorage.getItem("UserModel"));
+    this.nav.navigate(['/Dashboard/UserHome']);
 }
   
 }

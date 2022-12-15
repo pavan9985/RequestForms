@@ -1,0 +1,68 @@
+<div>
+    <div class="row mt-5 mb-2 pt-2">
+        <div class="col-12 text-center">
+            <h3>Add Form</h3>
+        </div>
+
+    </div>
+
+    <div>
+            <div class="row">
+                <div class="col-12 text-center align-items-center">
+                    <mat-form-field appearance="fill">
+                        <input matInput placeholder="Form Name" required>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div>
+                <!-- <div *ngFor="let RowData of RowDataTypes">
+                    <div class="row">
+                        <div class="col-4 text-center">
+                            <mat-form-field appearance="fill">
+                                <mat-select [(value)]="selectedIssue" placeholder="Field Type" required>
+                                    <mat-option *ngFor="let FType of FieldTypes" [value]="FType.value">
+                                        {{FType.viewValue}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <span *ngIf="selectedIssue == 1">
+                                <mat-checkbox>Email Format</mat-checkbox>
+                            </span>
+                        </div>
+                        <div class="col-4 text-center">
+                            <mat-form-field appearance="fill">
+                                <mat-select [(value)]="selectedIssue" placeholder="Field Type" required>
+                                    <mat-option *ngFor="let FType of FieldTypes" [value]="FType.value">
+                                        {{FType.viewValue}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <span *ngIf="selectedIssue == 1">
+                                <mat-checkbox>Email Format</mat-checkbox>
+                            </span>
+                        </div>
+                        <div class="col-4 text-center">
+                            <mat-form-field appearance="fill">
+                                <mat-select [(value)]="selectedIssue" formControlName="SelectedTypeCol2" placeholder="Field Type" required>
+                                    <mat-option *ngFor="let FType of FieldTypes" [value]="FType.value">
+                                        {{FType.viewValue}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <span *ngIf="selectedIssue == 1">
+                                <mat-checkbox formControlName="Emailvalidation">Email Format</mat-checkbox>
+                            </span>
+                        </div>
+
+                    </div>
+                </div> -->
+            </div>
+            <div class="row mt-3 mb-3">
+                <div class="col-12 text-center">
+                    <button class="btn btn-info lh-1"
+                        (click)="AddRow()"><mat-icon>border_color</mat-icon></button><br />
+                    <span class="">Create Form Field <br /> <span class="fw-light">max 3 fields</span></span>
+                </div>
+            </div>
+    </div>
+</div>

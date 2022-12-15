@@ -1,0 +1,46 @@
+<div class="mt-5 pt-3">
+    <div>
+        <span class="row"> 
+            <div class="col-xl-12 col-lg-12 text-center align-items-center">
+                <button class="btn btn-primary" matTooltip="Create Form" (click)="AddFormRow()">Add Form</button>
+            </div>
+        </span>
+    </div>
+
+
+    <div class="row mt-2">
+        <mat-card class="example-card float-right m-2" *ngFor="let Form of FormsLists">
+            <mat-card-header>
+                <!-- <img class="shadow" src="{{Provider.image}}" mat-card-avatar /> -->
+                <mat-card-title>
+                    {{Form.FormName}} 
+                </mat-card-title>
+                <span class="text-success" *ngIf="Form.Active" ><mat-icon matTooltip="Active Form">adjust</mat-icon></span>
+                <span class="text-danger" *ngIf="!Form.Active" ><mat-icon matTooltip="Form not in Use">adjust</mat-icon></span>
+                <mat-card-subtitle>
+                    Created On : <i>{{Form.CreatedDate}}</i>
+                </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <div class="mb-3">
+                    <span><b>Total Submitions :</b> &nbsp;</span>
+                    <span>{{Form.TotalSubmitions}}</span>
+                </div>
+                <div class="d-flex">
+                <span><b>Config :</b>&nbsp;</span>
+                <!-- <mat-icon>star</mat-icon> -->
+                    <span>&nbsp; {{Form.Config}}</span>
+                </div>
+                <hr/>
+                <!-- <mat-divider inset></mat-divider> -->
+                <mat-card-actions>
+                    
+                        <button  class="m-2 btn-info btn">Edit</button>
+                        <button class="btn btn-danger">InActive</button>
+                    
+                </mat-card-actions>
+            </mat-card-content>
+        </mat-card>
+</div>
+
+</div>

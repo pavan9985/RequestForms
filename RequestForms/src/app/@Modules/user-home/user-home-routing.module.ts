@@ -1,16 +1,16 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { FormCustomizationDirectiveComponent } from './form-customization-directive/form-customization-directive.component';
+import { UserHomeDirectiveComponent } from './user-home-directive/user-home-directive.component';
 
 const routes: Routes = [
   {path:'', redirectTo:'home', pathMatch:'full'},
   {
     
     path:"",
-    component : FormCustomizationDirectiveComponent,
+    component : UserHomeDirectiveComponent,
     children:[
       {
-        path: "main-view", component : FormCustomizationDirectiveComponent
+        path: "main-view", component : UserHomeDirectiveComponent
       },
     ],
   },
@@ -20,4 +20,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class FormCustomizationRoutingModule { }
+export class UserHomeRoutingModule { }
