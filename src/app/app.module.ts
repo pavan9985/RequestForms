@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { MaterialModule } from './Shared/material/material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { UtilityModule } from './Shared/utility/utility.module';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -19,8 +20,10 @@ import { UtilityModule } from './Shared/utility/utility.module';
     AppRoutingModule,
     UtilityModule,
     BrowserAnimationsModule
+    
   ],
-  providers: [],
+  
+  providers: [{provide: LocationStrategy, useClass: HashLocationStrategy}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
