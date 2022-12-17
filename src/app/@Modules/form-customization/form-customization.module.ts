@@ -7,6 +7,7 @@ import { MaterialModule } from 'src/app/Shared/material/material.module';
 import { AddEditFormDirectiveComponent } from './add-edit-form-directive/add-edit-form-directive.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormFieldDirectiveComponent } from './form-field-directive/form-field-directive.component';
+import { UtilityModule } from 'src/app/Shared/utility/utility.module';
 
 
 @NgModule({
@@ -18,6 +19,7 @@ import { FormFieldDirectiveComponent } from './form-field-directive/form-field-d
   imports: [
     CommonModule,
     MaterialModule,
+    UtilityModule,
     ReactiveFormsModule,
     FormCustomizationRoutingModule
   ]

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { UtilityModule } from 'src/app/Shared/utility/utility.module';
 import { FormFieldDirectiveComponent } from '../form-field-directive/form-field-directive.component';
 
 @Component({
@@ -26,16 +27,19 @@ export class AddEditFormDirectiveComponent implements OnInit {
 
  ngOnInit() {
   this.userForm = this._formBuilder.group({
-    Email: ['', Validators.required],
-    Password: ['', Validators.required],
-    RowData: this._formBuilder.array([])
+    FormName: ['', Validators.required],
+    FormFields: this._formBuilder.array([]),
   });
 }
 
-constructor(private _formBuilder: FormBuilder, public _openDialog: MatDialog){
+constructor(private _formBuilder: FormBuilder, public _openDialog: MatDialog, private _utility: UtilityModule){
 
 }
   AddRow(){
+    if(this._utility.hasValue(this.userForm.value.FormName) == false){
+      this._utility.AlertWarning("Provide Form Name");
+      return;
+    }
     const dialogRefserviceProvidersPage = this._openDialog.open(
       FormFieldDirectiveComponent,
       {
