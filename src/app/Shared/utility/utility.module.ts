@@ -33,6 +33,7 @@ export class UtilityModule {
   AlertWarning(message:string){
     this._snackBar.open(message, "Ok",{
       duration: 3000,
+      panelClass : ['mb-4']
     });
   }
 }

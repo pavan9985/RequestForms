@@ -6,11 +6,11 @@
 
     </div>
 
-    <div>
+    <div [formGroup]="userForm">
             <div class="row">
                 <div class="col-12 text-center align-items-center">
                     <mat-form-field appearance="fill">
-                        <input matInput placeholder="Form Name" required>
+                        <input matInput formControlName="FormName" placeholder="Form Name" required>
                     </mat-form-field>
                 </div>
             </div>
