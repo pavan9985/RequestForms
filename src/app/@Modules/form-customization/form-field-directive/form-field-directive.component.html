@@ -11,8 +11,15 @@
         <div [formGroup]="InputTypeForm">
             <div class="row">
                 <div class="col-12 text-center">
+                    <mat-form-field appearance="outline">
+                        <input matInput pattern="^[a-zA-Z0-9]+$" (keypress)="lettersOnly($event)" formControlName="FieldLable" placeholder="Field Lable" required>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 text-center">
                     <mat-form-field appearance="fill">
-                        <mat-select [(value)]="selectedFieldType" placeholder="Field Type" required>
+                        <mat-select [(value)]="selectedFieldType" formControlName="FieldTypeId"  placeholder="Field Type" required>
                             <mat-option *ngFor="let FType of FieldTypes" [value]="FType.value">
                                 {{FType.viewValue}}
                             </mat-option>
@@ -26,37 +33,36 @@
                     <!-- TextBox Validations Start -->
                     <div *ngIf="selectedFieldType == 1" class="col-xl-2 col-lg-2 col-md-3 col-sm-12 col-xs-12">
                         <span>
-                            <mat-checkbox [checked]="TextBoxEmailCheck"
+                            <mat-checkbox [checked]="TextBoxEmailCheck" formControlName="TextBoxEmailFormatCheck"
                                 (change)="CheckFunctions($event, 'TextBoxEmail-Format')">Email
                                 Format</mat-checkbox>
                         </span>
                     </div>
                     <div *ngIf="selectedFieldType == 1" class="col-xl-2 col-lg-2 col-md-3 col-sm-12 col-xs-12">
                         <span>
-                            <mat-checkbox [checked]="TextBoxRequiredCheck"
+                            <mat-checkbox [checked]="TextBoxRequiredCheck" formControlName="TextBoxRequiredCheck"
                                 (change)="CheckFunctions($event, 'TextBox-Required')">Required</mat-checkbox>
                         </span>
                     </div>
-                    <div *ngIf="selectedFieldType == 1 && TextBoxRequiredCheck"
-                        class="col-xl-2 col-lg-2 col-md-3 col-sm-12 col-xs-12">
+                    <div *ngIf="selectedFieldType == 1" class="col-xl-2 col-lg-2 col-md-3 col-sm-12 col-xs-12">
                         <span>
                             <span>Size </span>
                             <mat-slider class="example-margin" [disabled]="false" matTooltip="Length" [max]="250"
                                 [min]="1" [step]="1" [discrete]="true" [showTickMarks]="false">
-                                <input value="1" matSliderStartThumb>
-                                <input value="30" matSliderEndThumb>
+                                <input value="1" formControlName="TextBoxMinLength" matSliderStartThumb>
+                                <input value="30" formControlName="TextBoxMaxLength" matSliderEndThumb>
                             </mat-slider>
                         </span>
 
                     </div>
                     <div *ngIf="selectedFieldType == 1" class="col-xl-2 col-lg-2 col-md-3 col-sm-12 col-xs-12">
                         <span>
-                            <mat-checkbox (change)="CheckFunctions($event, 'Lower-Case')">Lower Case</mat-checkbox>
+                            <mat-checkbox formControlName="TextBoxLowerCase" (change)="CheckFunctions($event, 'Lower-Case')">Lower Case</mat-checkbox>
                         </span>
                     </div>
                     <div *ngIf="selectedFieldType == 1" class="col-xl-2 col-lg-2 col-md-3 col-sm-12 col-xs-12">
                         <span>
-                            <mat-checkbox (change)="CheckFunctions($event, 'Upper-Case')">Upper Case</mat-checkbox>
+                            <mat-checkbox formControlName="TextBoxUpperCase" (change)="CheckFunctions($event, 'Upper-Case')">Upper Case</mat-checkbox>
                         </span>
                     </div>
 
@@ -66,18 +72,17 @@
 
                     <div *ngIf="selectedFieldType == 2" class="col-xl-2 col-lg-2 col-md-3 col-sm-12 col-xs-12">
                         <span>
-                            <mat-checkbox [checked]="TextAreaRequireCheck"
+                            <mat-checkbox [checked]="TextAreaRequireCheck" formControlName="TextAreaRequired"
                                 (change)="CheckFunctions($event, 'TextArea-Required')">Required</mat-checkbox>
                         </span>
                     </div>
-                    <div *ngIf="selectedFieldType == 2 && TextAreaRequireCheck"
-                        class="col-xl-2 col-lg-2 col-md-3 col-sm-12 col-xs-12">
+                    <div *ngIf="selectedFieldType == 2" class="col-xl-2 col-lg-2 col-md-3 col-sm-12 col-xs-12">
                         <span>
                             <span>Size </span>
                             <mat-slider class="example-margin" [disabled]="false" matTooltip="Length" [max]="10000"
                                 [min]="1" [step]="1" [discrete]="true" [showTickMarks]="false">
-                                <input value="1" matSliderStartThumb>
-                                <input value="250" matSliderEndThumb>
+                                <input value="1" formControlName="TextAreaMinLength" matSliderStartThumb>
+                                <input value="250" formControlName="TextAreaMaxLength" matSliderEndThumb>
                             </mat-slider>
                         </span>
 
@@ -88,18 +93,17 @@
 
                     <div *ngIf="selectedFieldType == 3" class="col-xl-2 col-lg-2 col-md-3 col-sm-12 col-xs-12">
                         <span>
-                            <mat-checkbox [checked]="DatePickerRequiredCheck"
+                            <mat-checkbox [checked]="DatePickerRequiredCheck" formControlName="DatePicketRequired"
                                 (change)="CheckFunctions($event, 'DatePicker-Required')">Required</mat-checkbox>
                         </span>
                     </div>
-                    <div *ngIf="selectedFieldType == 3"
-                        class="col-xl-2 col-lg-2 col-md-3 col-sm-12 col-xs-12">
+                    <div *ngIf="selectedFieldType == 3" class="col-xl-2 col-lg-2 col-md-3 col-sm-12 col-xs-12">
                         <span>
                             <mat-form-field appearance="fill">
                                 <mat-label>Enter a date range</mat-label>
                                 <mat-date-range-input [rangePicker]="picker">
-                                    <input matStartDate placeholder="Start date">
-                                    <input matEndDate placeholder="End date">
+                                    <input formControlName="DatePicketStartDate" matStartDate placeholder="Start date">
+                                    <input formControlName="DatePicketEndDate" matEndDate placeholder="End date">
                                 </mat-date-range-input>
                                 <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
                                 <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
@@ -114,53 +118,96 @@
 
                     <!-- Radio Button Validations Start -->
 
-                    <div *ngIf="selectedFieldType == 4" class="col-xl-2 col-lg-2 col-md-3 col-sm-12 col-xs-12">
+                    <div *ngIf="selectedFieldType == 4" class="col-xl-2 col-lg-2 col-md-3 col-sm-12 col-xs-12 text-center">
                         <span>
-                            <mat-checkbox [checked]="RadioButtonRequired"
+                            <mat-checkbox [checked]="RadioButtonRequired" formControlName="RadioButtonRequired"
                                 (change)="CheckFunctions($event, 'RadioButton-Required')">Required</mat-checkbox>
                         </span>
                     </div>
                     <div *ngIf="selectedFieldType == 4" formArrayName="radioButtonValues"
                         class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-xs-12 text-center">
-                        <span *ngFor="let  x of RadioButtonOptionsFormArray.controls; let i=index" >
-                            <div [formGroupName]="i">
-                                <mat-form-field appearance="fill" >
-                                    <input matInput formControlName="Option"  placeholder="Option {{i+1}}" required>
+                        <span class="mx-2" *ngFor="let  x of RadioButtonOptionsFormArray.controls; let i=index" [formGroupName]="i">
+                                <mat-form-field appearance="fill">
+                                    <input matInput formControlName="Option" placeholder="Option {{i+1}}" required>
+                                    <button matSuffix mat-icon-button aria-label="Clear" (click)="removeOrClearRadioButtonOptions(i)">
+                                        <mat-icon matSuffix  class="rounded-circle text-danger"
+                                >remove_circle_outline</mat-icon>
+                                    </button>
                                 </mat-form-field>
-                                 
-                                <button class="btn btn-primary m-2" (click)="addRadioButtonOptionFormGroup(i)">Add</button>
-                                <button class="btn btn-primary" (click)="removeOrClearRadioButtonOptions(i)"><mat-icon>clear</mat-icon></button>
-                            </div> 
+
+                                
                             <!-- <button class="btn btn-primary" (click)="options.Add(i)">Add</button> -->
                         </span>
-                        
+                        <br/>
+                        <span class="rounded-circle text-success cursor-pointer"
+                                (click)="addRadioButtonOptionFormGroup()">Add a Option</span>
+
                     </div>
-                    
+
                     <!-- Radio Button Validations End -->
 
                     <!-- Check Box Validation Starts -->
-                    <div *ngIf="selectedFieldType == 5" class="col-xl-2 col-lg-2 col-md-3 col-sm-12 col-xs-12">
+                    <div *ngIf="selectedFieldType == 5"
+                        class="col-xl-2 col-lg-2 col-md-3 col-sm-12 col-xs-12 text-center">
                         <span>
-                            <mat-checkbox [checked]="CheckBoxRequired"
+                            <mat-checkbox [checked]="CheckBoxRequired" formControlName="CheckBoxRequired"
                                 (change)="CheckFunctions($event, 'CheckBox-Required')">Required</mat-checkbox>
                         </span>
                     </div>
                     <div *ngIf="selectedFieldType == 5" formArrayName="CheckBoxValues"
-                        class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-xs-12 text-center">
-                        <span *ngFor="let  x of CheckBoxOptionsFormArray.controls; let i=index" >
-                            <div [formGroupName]="i">
-                                <mat-form-field appearance="fill" >
-                                    <input matInput formControlName="Option"  placeholder="Option {{i+1}}" required>
+                        class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-xs-8 text-center">
+                        <span class="mx-2" *ngFor="let  x of CheckBoxOptionsFormArray.controls; let i=index" [formGroupName]="i">
+                                <mat-form-field appearance="fill">
+                                    <input matInput formControlName="Option" placeholder="Option {{i+1}}" required>
+                                    <button matSuffix mat-icon-button aria-label="Clear" (click)="removeOrClearCheckBoxOptions(i)">
+                                        <mat-icon matSuffix  class="rounded-circle text-danger"
+                                >remove_circle_outline</mat-icon>
+                                    </button>
+                                    
                                 </mat-form-field>
-                                 
-                                <button class="btn btn-primary m-2" (click)="addCheckBoxOptionFormGroup(i)">Add</button>
-                                <button class="btn btn-primary" (click)="removeOrClearCheckBoxOptions(i)"><mat-icon>clear</mat-icon></button>
-                            </div> 
+
+
+                            
+                            
                             <!-- <button class="btn btn-primary" (click)="options.Add(i)">Add</button> -->
                         </span>
-                        
+                        <br/>
+                        <span class="rounded-circle text-success cursor-pointer"
+                                (click)="addCheckBoxOptionFormGroup()">Add a Option</span>
+
                     </div>
 
+                    <!-- Check Box Validation End -->
+
+                    <!-- File Upload Start -->
+
+                    <div *ngIf="selectedFieldType == 6"
+                        class="col-xl-2 col-lg-2 col-md-3 col-sm-12 col-xs-12 text-center">
+                        <span>
+                            <mat-checkbox [checked]="FileUploadRequire" formControlName="UploadFileRequired"
+                                (change)="CheckFunctions($event, 'FileUpload-Required')">Required</mat-checkbox>
+                        </span>
+                    </div>
+                    <div *ngIf="selectedFieldType == 6"
+                        class="col-xl-2 col-lg-2 col-md-3 col-sm-12 col-xs-12 text-center">
+                        <span>
+                            <mat-form-field appearance="fill">
+                                <mat-select [(value)]="selectedUFieldType" formControlName="UploadFileTypeId"  placeholder="Field Type" required>
+                                    <mat-option *ngFor="let UFType of UploadFileTypes" [value]="UFType.FileTypeId">
+                                        {{UFType.FileTypeName}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </span>
+                    </div>
+                    <!-- File Upload End -->
+
+                </div>
+                <div class="row ">
+                    <div class="col-12 text-center">
+                        <button *ngIf="selectedFieldType >= 1" class="btn btn-primary m-2 mt-3" (click)="FormFieldSave()">Save</button>
+                        <button class="btn btn-warning m-2 mt-3" (click)="CancleFormFiledPopUp()">Cancle</button>
+                    </div>
                 </div>
             </div>
         </div>
