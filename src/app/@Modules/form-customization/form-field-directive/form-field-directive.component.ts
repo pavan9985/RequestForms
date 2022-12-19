@@ -359,7 +359,7 @@ export class FormFieldDirectiveComponent implements OnInit {
 
   }
   CancleFormFiledPopUp() {
-
+    this.dialogRef.close();
   }
 
 

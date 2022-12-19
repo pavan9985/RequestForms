@@ -59,7 +59,7 @@
         </div>
 
 
-        <div class="" formArrayName="RowDataArray">
+        <!-- <div class="" formArrayName="RowDataArray">
             <div class="row" *ngFor="let  x of RowDataFormArray.controls; let rowIndex=index"
                 [formGroupName]="rowIndex">
                 <div formArrayName="ColDataArray" class="row">
@@ -75,7 +75,69 @@
                     </div>
                 </div>
             </div>
+        </div> -->
+
+
+
+
+
+
+        <div class="" formArrayName="RowDataArray">
+            <div class="row mx-auto" *ngFor="let  x of RowDataFormArray.controls; let rowIndex=index"
+                [formGroupName]="rowIndex">
+                <div formArrayName="ColDataArray" class="row">
+
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12 mx-auto text-center"
+                        *ngFor="let y of CheckBoxOptionsFormArray(rowIndex).controls; let colIndex=index">
+                        <div [formGroupName]="colIndex">
+                            <span [hidden]="!(y.value.FieldType == 1)">
+                                <mat-form-field appearance="outline">
+                                    <input matInput readonly formControlName="FieldValueOne" placeholder="{{y.value.FieldLable}}" required>
+                                </mat-form-field>
+                            </span>
+                            <span [hidden]="!(y.value.FieldType == 2)">
+                                <mat-form-field appearance="outline">
+                                    <textarea matInput readonly formControlName="FieldValueOne" placeholder="{{y.value.FieldLable}}" required></textarea>
+                                </mat-form-field>
+                            </span>
+                            <span [hidden]="!(y.value.FieldType == 3)">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Enter a date range</mat-label>
+                                    <mat-date-range-input readonly>
+                                        <input readonly formControlName="FieldValueOne"  matStartDate placeholder="Start date">
+                                        <input readonly matEndDate placeholder="End date">
+                                    </mat-date-range-input>
+                                    <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+                                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                                    <mat-date-range-picker  touchUi #picker></mat-date-range-picker>
+    
+                                </mat-form-field>
+                            </span>
+                            <span [hidden]="!(y.value.FieldType == 0)">
+                                <button class="btn btn-info lh-1"
+                                    (click)="AddRow()"><mat-icon>border_color</mat-icon></button><br />
+                                <span class="">Create Form Field <br /> <span class="fw-light">*max 3 fields per
+                                        row</span></span>
+                            </span>
+                            <!-- <div>
+                            <mat-form-field appearance="outline">
+                                <input matInput placeholder="Lable">
+                            </mat-form-field>
+                        </div> -->
+                        </div>
+
+
+                    </div>
+
+
+                    <!-- <div class="row">
+                        <div class="col-3"></div>
+
+                    </div> -->
+                </div>
+            </div>
         </div>
+
 
 
 
