@@ -1,17 +1,42 @@
-<div>
-    <div class="row mt-5 mb-2 pt-2">
-        <div class="col-12 text-center">
+<div class="my-5">
+    <div class="row my-2">
+        <!-- <div class="row mt-5 mb-2 pt-2"> -->
+
+        <div class="col-12 mx-5 text-start lh-0">
             <h3>Customize your form</h3>
         </div>
-
+        <div class="col-12 mx-5 text-start">
+            <span><i>Easy & convenient to build</i></span>
+        </div>
+        <div class="col-12 text-end">
+            <span class="mx-5" (click)="BordersAction()">
+                <mat-icon *ngIf="bordersView" matTooltip="Clear Borders">border_clear</mat-icon>
+                <mat-icon *ngIf="!bordersView" matTooltip="Add Borders">border_all</mat-icon>
+            </span>
+        </div>
     </div>
-
+    <hr />
     <div [formGroup]="userForm">
-        <div class="row">
-            <div class="col-12 text-center align-items-center">
-                <mat-form-field appearance="fill">
-                    <input matInput formControlName="FormName" placeholder="Form Name" required>
-                </mat-form-field>
+        <div class="my-4">
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-6 col-xs-6 mx-auto text-center align-items-center">
+
+                    <input onkeypress="this.style.width = ((this.value.length + 1) * 12) + 'px';"
+                        class="text-center align-items-center border-0 border-bottom border-dark"
+                        style="font-weight: bold;font-size: large;word-wrap: break-word;min-width: 20%;"
+                        formControlName="FormName" placeholder="Title" required>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-6 col-xs-6 mx-auto text-center align-items-center">
+
+                    <input onkeydown="this.style.width = ((this.value.length + 1) * 10) + 'px';"
+                        class="text-center align-items-center border-0 border-bottom border-dark"
+                        style="font-size: medium;word-wrap: break-word;min-width: 10%;" formControlName="FormName"
+                        placeholder="Discription" required>
+
+                </div>
             </div>
         </div>
         <div>
@@ -82,41 +107,54 @@
 
 
 
-        <div class="" formArrayName="RowDataArray">
-            <div class="row mx-auto" *ngFor="let  x of RowDataFormArray.controls; let rowIndex=index"
+        <div class="mx-2" formArrayName="RowDataArray">
+            <div class="row {{bordersView?'border':''}} mx-auto my-4" *ngFor="let  x of RowDataFormArray.controls; let rowIndex=index"
                 [formGroupName]="rowIndex">
                 <div formArrayName="ColDataArray" class="row">
 
-                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12 mx-auto text-center"
+                    <div class="{{bordersView?'border':''}} col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12 mx-auto text-center"
                         *ngFor="let y of CheckBoxOptionsFormArray(rowIndex).controls; let colIndex=index">
                         <div [formGroupName]="colIndex">
                             <span [hidden]="!(y.value.FieldType == 1)">
                                 <mat-form-field appearance="outline">
-                                    <input matInput readonly formControlName="FieldValueOne" placeholder="{{y.value.FieldLable}}" required>
+                                    <input matInput formControlName="FieldValueOne" placeholder="{{y.value.FieldLable}}"
+                                        required>
                                 </mat-form-field>
                             </span>
                             <span [hidden]="!(y.value.FieldType == 2)">
                                 <mat-form-field appearance="outline">
-                                    <textarea matInput readonly formControlName="FieldValueOne" placeholder="{{y.value.FieldLable}}" required></textarea>
+                                    <textarea matInput formControlName="FieldValueOne"
+                                        placeholder="{{y.value.FieldLable}}" required></textarea>
                                 </mat-form-field>
                             </span>
                             <span [hidden]="!(y.value.FieldType == 3)">
                                 <mat-form-field appearance="outline">
-                                    <mat-label>Enter a date range</mat-label>
-                                    <mat-date-range-input readonly>
-                                        <input readonly formControlName="FieldValueOne"  matStartDate placeholder="Start date">
-                                        <input readonly matEndDate placeholder="End date">
+                                    <mat-label>{{y.value.FieldLable}}</mat-label>
+                                    <mat-date-range-input [rangePicker]="picker">
+                                        <input formControlName="FieldValueOne" matStartDate placeholder="Start date">
+                                        <input formControlName="FieldValueTwo" matEndDate placeholder="End date">
                                     </mat-date-range-input>
                                     <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
                                     <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                                    <mat-date-range-picker  touchUi #picker></mat-date-range-picker>
-    
+                                    <mat-date-range-picker touchUi #picker></mat-date-range-picker>
+
                                 </mat-form-field>
                             </span>
+                            <span [hidden]="(y.value.FieldType == 0 || y.value.FieldType==-1)">
+                                <div>
+                                <!-- <button class="btn rounded-circle btn-secondary">Edit</button> -->
+                                <mat-icon matSuffix class="rounded-circle text-info mx-2">edit</mat-icon>
+
+                                <mat-icon matSuffix
+                                    class="rounded-circle text-danger mx-2">remove_circle_outline</mat-icon>
+                                </div>
+                            </span>
                             <span [hidden]="!(y.value.FieldType == 0)">
-                                <button class="btn btn-info lh-1"
-                                    (click)="AddRow()"><mat-icon>border_color</mat-icon></button><br />
-                                <span class="">Create Form Field <br /> <span class="fw-light">*max 3 fields per
+                                <mat-icon class="rounded-circle text-success"
+                                    (click)="AddRow(rowIndex, colIndex)">add_circle_outline</mat-icon><br />
+                                <span class="text-info cursor-pointer"
+                                    (click)="LeaveFieldArea(rowIndex,colIndex)">Leave this field area.</span><br />
+                                <span class=""><span class="fw-light">*max 3 fields per
                                         row</span></span>
                             </span>
                             <!-- <div>
@@ -148,5 +186,10 @@
                 <span class="">Create Form Field <br /> <span class="fw-light">*max 3 fields per row</span></span>
             </div>
         </div> -->
+    </div>
+    <div class="row">
+        <div class="col-12 mx-auto text-center">
+            <button class="btn btn-warning" (click)="ClosePopUp()">Cancle</button>
+        </div>
     </div>
 </div>
