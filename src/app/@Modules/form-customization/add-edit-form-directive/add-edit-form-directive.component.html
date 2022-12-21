@@ -33,8 +33,8 @@
 
                     <input onkeydown="this.style.width = ((this.value.length + 1) * 10) + 'px';"
                         class="text-center align-items-center border-0 border-bottom border-dark"
-                        style="font-size: medium;word-wrap: break-word;min-width: 10%;" formControlName="FormName"
-                        placeholder="Discription" required>
+                        style="font-size: medium;word-wrap: break-word;min-width: 10%;" formControlName="FormDis"
+                        placeholder="Discription">
 
                 </div>
             </div>
@@ -108,8 +108,8 @@
 
 
         <div class="mx-2" formArrayName="RowDataArray">
-            <div class="row {{bordersView?'border':''}} mx-auto my-4" *ngFor="let  x of RowDataFormArray.controls; let rowIndex=index"
-                [formGroupName]="rowIndex">
+            <div class="row {{bordersView?'border':''}} mx-auto my-4"
+                *ngFor="let  x of RowDataFormArray.controls; let rowIndex=index" [formGroupName]="rowIndex">
                 <div formArrayName="ColDataArray" class="row">
 
                     <div class="{{bordersView?'border':''}} col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12 mx-auto text-center"
@@ -117,14 +117,14 @@
                         <div [formGroupName]="colIndex">
                             <span [hidden]="!(y.value.FieldType == 1)">
                                 <mat-form-field appearance="outline">
-                                    <input matInput formControlName="FieldValueOne" placeholder="{{y.value.FieldLable}}"
-                                        required>
+                                    <input matInput formControlName="FieldValueOne"
+                                        placeholder="{{y.value.FieldLable}}">
                                 </mat-form-field>
                             </span>
                             <span [hidden]="!(y.value.FieldType == 2)">
                                 <mat-form-field appearance="outline">
                                     <textarea matInput formControlName="FieldValueOne"
-                                        placeholder="{{y.value.FieldLable}}" required></textarea>
+                                        placeholder="{{y.value.FieldLable}}"></textarea>
                                 </mat-form-field>
                             </span>
                             <span [hidden]="!(y.value.FieldType == 3)">
@@ -140,20 +140,59 @@
 
                                 </mat-form-field>
                             </span>
+                            <span [hidden]="!(y.value.FieldType == 4)">
+                                <label id="example-radio-group-label">{{y.value.FieldLable}}</label><br />
+                                <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
+                                    formControlName="FieldValueOne">
+                                    <mat-radio-button class="example-radio-button"
+                                        *ngFor="let option of y.value.Options" [value]="option">
+                                        {{option.Option}}
+                                    </mat-radio-button>
+                                </mat-radio-group>
+                            </span>
+                            <span [hidden]="!(y.value.FieldType == 5)">
+                                <section class="example-section">
+                                    <label id="example-radio-group-label">{{y.value.FieldLable}}</label><br />
+
+                                    <p><mat-checkbox (change)="checkBoxChange($event, rowIndex,colIndex, option.Option)"
+                                            *ngFor="let option of y.value.Options">{{option.Option}}</mat-checkbox></p>
+                                </section>
+                            </span>
+                            <span [hidden]="!(y.value.FieldType == 6)">
+                                <!-- <input class="ng-hide" id="input-file-id" multiple type="file" accept=".txt"/>
+                                <label for="input-file-id" class="md-button md-raised md-primary">Choose Files</label> -->
+
+                                <!-- <input #csvInput hidden="true" type="file" onclick="this.value=null"
+                                    (change)="csvInputChange($event)" accept=".txt" />
+                                <button mat-flat-button color="primary" (click)="csvInput.click()">Choose Spreadsheet
+                                    File (CSV)</button> -->
+
+
+                                <mat-form-field class="columns">
+                                    <mat-label *ngIf="y.value.UploadFileValue">{{y.value.UploadFileValue.name}}</mat-label>
+                                    
+                                    <input class="border-bottom-1"  matInput readonly placeholder="Choose File">
+                                    <button mat-icon-button matSuffix (click)="fileInput.click()">
+                                        <mat-icon>attach_file</mat-icon>
+                                    </button>
+                                    <input hidden (change)="selectFile($event, rowIndex,colIndex)" #fileInput type="file" id="file">
+                                </mat-form-field>
+
+                            </span>
                             <span [hidden]="(y.value.FieldType == 0 || y.value.FieldType==-1)">
                                 <div>
-                                <!-- <button class="btn rounded-circle btn-secondary">Edit</button> -->
-                                <mat-icon matSuffix class="rounded-circle text-info mx-2">edit</mat-icon>
+                                    <!-- <button class="btn rounded-circle btn-secondary">Edit</button> -->
+                                    <mat-icon matSuffix class="rounded-circle text-info mx-2">edit</mat-icon>
 
-                                <mat-icon matSuffix
-                                    class="rounded-circle text-danger mx-2">remove_circle_outline</mat-icon>
+                                    <mat-icon matSuffix
+                                        class="rounded-circle text-danger mx-2">remove_circle_outline</mat-icon>
                                 </div>
                             </span>
                             <span [hidden]="!(y.value.FieldType == 0)">
                                 <mat-icon class="rounded-circle text-success"
                                     (click)="AddRow(rowIndex, colIndex)">add_circle_outline</mat-icon><br />
-                                <span class="text-info cursor-pointer"
-                                    (click)="LeaveFieldArea(rowIndex,colIndex)">Leave this field area.</span><br />
+                                <span class="text-info cursor-pointer" (click)="LeaveFieldArea(rowIndex,colIndex)">Leave
+                                    this field area.</span><br />
                                 <span class=""><span class="fw-light">*max 3 fields per
                                         row</span></span>
                             </span>
@@ -189,7 +228,9 @@
     </div>
     <div class="row">
         <div class="col-12 mx-auto text-center">
-            <button class="btn btn-warning" (click)="ClosePopUp()">Cancle</button>
+            <button *ngIf="userForm.value.FormName" class="btn btn-info m-1" (click)="SaveForm()">Save</button>
+            <button *ngIf="userForm.value.FormName" class="btn btn-primary m-1" (click)="SaveFormAndGoLive()">Save & GoLive</button>
+            <button class="btn btn-warning m-1" (click)="ClosePopUp()">Cancle</button>
         </div>
     </div>
 </div>
