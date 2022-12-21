@@ -3,6 +3,7 @@ import { FormArray, FormBuilder, FormControl, FormControlDirective, FormControlN
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatInput } from '@angular/material/input';
 import { UtilityModule } from 'src/app/Shared/utility/utility.module';
+import { FormViewDirectiveComponent } from '../../form-view/form-view-directive/form-view-directive.component';
 import { FormFieldDirectiveComponent } from '../form-field-directive/form-field-directive.component';
 
 
@@ -325,6 +326,18 @@ export class AddEditFormDirectiveComponent implements OnInit {
 
   SaveForm(){
     console.log(this.userForm.value);
+console.log(this.userForm.value);
+    const dialogRefserviceProvidersPage = this._openDialog.open(
+      FormViewDirectiveComponent,
+      {
+        panelClass: "full-screen-dialog",
+        data: this.userForm.value,
+      }
+    );
+
+
+
+
     this._utility.AlertWarning("Form will not go to live, it will save as draft.");
     this._closeDialog.close();
   }

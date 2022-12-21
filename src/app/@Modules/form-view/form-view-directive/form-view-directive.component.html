@@ -1,1 +1,154 @@
-<p>form-view-directive works!</p>
+
+<div class="mt-5 pt-3">
+    <div [formGroup]="userForm">
+    <div >
+        <div class="container">
+        <div class="row bg-light p-1">
+            <div class="col-12 mx-auto text-center">
+                <h4>{{this.userForm.value.FormName}}</h4>
+
+            </div>
+            <div class="col-12 fs-9 text-center">
+                <i>{{this.userForm.value.FormDis}}</i>
+            </div>
+            <hr class="text-dark mx-auto text-center w-75" />
+
+        </div>
+        </div>
+
+    </div>
+    <div>
+        <div class="container">
+        <div class="row mt-4" >
+            <div class="col-xl-8 col-lg-8 col-md-10 col-10 col-10 mx-auto text-center">
+                <div formArrayName="RowDataArray">
+                    <div class="row mx-auto my-4"
+                        *ngFor="let  x of RowDataFormArray.controls; let rowIndex=index" [formGroupName]="rowIndex">
+                        <div formArrayName="ColDataArray" class="row">
+
+                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12 mx-auto text-center"
+                                *ngFor="let y of ColDataFormArray(rowIndex).controls; let colIndex=index">
+                                <div [formGroupName]="colIndex">
+                                    <span [hidden]="!(y.value.FieldType == 1)">
+                                        <mat-form-field appearance="outline">
+                                            <input matInput formControlName="FieldValueOne"
+                                                placeholder="{{y.value.FieldLable}}">
+                                        </mat-form-field>
+                                    </span>
+                                    <span [hidden]="!(y.value.FieldType == 2)">
+                                        <mat-form-field appearance="outline">
+                                            <textarea matInput formControlName="FieldValueOne"
+                                                placeholder="{{y.value.FieldLable}}"></textarea>
+                                        </mat-form-field>
+                                    </span>
+                                    <span [hidden]="!(y.value.FieldType == 3)">
+                                        <mat-form-field appearance="outline">
+                                            <mat-label>{{y.value.FieldLable}}</mat-label>
+                                            <mat-date-range-input [rangePicker]="picker">
+                                                <input formControlName="FieldValueOne" matStartDate
+                                                    placeholder="Start date">
+                                                <input formControlName="FieldValueTwo" matEndDate
+                                                    placeholder="End date">
+                                            </mat-date-range-input>
+                                            <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+                                            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                                            <mat-date-range-picker touchUi #picker></mat-date-range-picker>
+
+                                        </mat-form-field>
+                                    </span>
+                                    <span [hidden]="!(y.value.FieldType == 4)">
+                                        <label id="example-radio-group-label">{{y.value.FieldLable}}</label><br />
+                                        <mat-radio-group aria-labelledby="example-radio-group-label"
+                                            class="example-radio-group" formControlName="FieldValueOne">
+                                            <mat-radio-button class="example-radio-button"
+                                                *ngFor="let option of y.value.Options" [value]="option">
+                                                {{option.Option}}
+                                            </mat-radio-button>
+                                        </mat-radio-group>
+                                    </span>
+                                    <span [hidden]="!(y.value.FieldType == 5)">
+                                        <section class="example-section">
+                                            <label id="example-radio-group-label">{{y.value.FieldLable}}</label><br />
+
+                                            <p><mat-checkbox
+                                                    (change)="checkBoxChange($event, rowIndex,colIndex, option.Option)"
+                                                    *ngFor="let option of y.value.Options">{{option.Option}}</mat-checkbox>
+                                            </p>
+                                        </section>
+                                    </span>
+                                    <span [hidden]="!(y.value.FieldType == 6)">
+                                        <!-- <input class="ng-hide" id="input-file-id" multiple type="file" accept=".txt"/>
+                                <label for="input-file-id" class="md-button md-raised md-primary">Choose Files</label> -->
+
+                                        <!-- <input #csvInput hidden="true" type="file" onclick="this.value=null"
+                                    (change)="csvInputChange($event)" accept=".txt" />
+                                <button mat-flat-button color="primary" (click)="csvInput.click()">Choose Spreadsheet
+                                    File (CSV)</button> -->
+
+
+                                        <mat-form-field class="columns">
+                                            <mat-label
+                                                *ngIf="y.value.UploadFileValue">{{y.value.UploadFileValue.name}}</mat-label>
+
+                                            <input class="border-bottom-1" matInput readonly placeholder="Choose File">
+                                            <button mat-icon-button matSuffix (click)="fileInput.click()">
+                                                <mat-icon>attach_file</mat-icon>
+                                            </button>
+                                            <input hidden (change)="selectFile($event, rowIndex,colIndex)" #fileInput
+                                                type="file" id="file">
+                                        </mat-form-field>
+
+                                    </span>
+                                    
+                                    <!-- <span [hidden]="!(y.value.FieldType == 0)">
+                                        <mat-icon class="rounded-circle text-success"
+                                            (click)="AddRow(rowIndex, colIndex)">add_circle_outline</mat-icon><br />
+                                        <span class="text-info cursor-pointer"
+                                            (click)="LeaveFieldArea(rowIndex,colIndex)">Leave
+                                            this field area.</span><br />
+                                        <span class=""><span class="fw-light">*max 3 fields per
+                                                row</span></span>
+                                    </span> -->
+                                    <!-- <div>
+                            <mat-form-field appearance="outline">
+                                <input matInput placeholder="Lable">
+                            </mat-form-field>
+                        </div> -->
+                                </div>
+
+
+                            </div>
+
+
+                            <!-- <div class="row">
+                        <div class="col-3"></div>
+
+                    </div> -->
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+
+                <div class="row bg-secondary">
+                    <div class="col-4 mx-auto text-center">
+                        hii
+                    </div>
+                    <div class="col-4 mx-auto text-center">
+                        hii
+                    </div>
+                    <div class="col-4 mx-auto text-center">
+                        hii
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        </div>
+    </div>
+</div>
+</div>
