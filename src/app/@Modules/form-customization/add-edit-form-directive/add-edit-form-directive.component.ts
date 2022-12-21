@@ -17,7 +17,8 @@ export class AddEditFormDirectiveComponent implements OnInit {
   // @ViewChildren('FormName') FormFocus!: QueryList<MatInput>;
 
   RowDataTypes: any = [];
-  bordersView:boolean=true;
+  bordersView: boolean = true;
+  selectedFiles: string = '';
 
   selectedIssue: any;
   RowArray: any = [];
@@ -37,62 +38,80 @@ export class AddEditFormDirectiveComponent implements OnInit {
   FormColIndex: number;
 
   ngOnInit() {
+    const data = {
+      FieldTypeId: 0,
+      FieldLable: 'Empty',
+    }
     this.userForm = this._formBuilder.group({
 
       FormName: ['', Validators.required],
-      RowDataArray: this._formBuilder.array([this.createRowIndexFormGroup(0,'Empty',-1)]),
+      FormDis: [''],
+      RowDataArray: this._formBuilder.array([this.createRowIndexFormGroup(data, -1)]),
     });
   }
 
-  constructor(private _formBuilder: FormBuilder, public _openDialog: MatDialog,public _closeDialog: MatDialogRef<AddEditFormDirectiveComponent>, private _utility: UtilityModule, private cdref: ChangeDetectorRef) {
+  constructor(private _formBuilder: FormBuilder, public _openDialog: MatDialog, public _closeDialog: MatDialogRef<AddEditFormDirectiveComponent>, private _utility: UtilityModule, private cdref: ChangeDetectorRef) {
     this.FormRowIndex = 1;
     this.FormColIndex = 1;
 
   }
 
 
-  private createRowIndexFormGroup(fieldType:number, FieldLable:string, rowIndex:number): FormGroup {
-    if(rowIndex>=0){
+  private createRowIndexFormGroup(data: any, rowIndex: number): FormGroup {
+    if (rowIndex >= 0) {
       const RowDataArray = this.userForm.get('RowDataArray') as FormArray;
       const ColDataArray = RowDataArray.controls[rowIndex].get('ColDataArray') as FormArray;
-      while(true){
-          if(ColDataArray.value.find((x:any) => x.FieldType == -1)){
-          ColDataArray.removeAt(ColDataArray.value.findIndex((x:any) => x.FieldType == -1));
+      while (true) {
+        if (ColDataArray.value.find((x: any) => x.FieldType == -1)) {
+          ColDataArray.removeAt(ColDataArray.value.findIndex((x: any) => x.FieldType == -1));
           continue;
-          }
-          else{
-            break;
-          }
+        }
+        else {
+          break;
+        }
 
       }
-      while(true){
-        if(RowDataArray.value.find((x:any) => x.ColDataArray.length==0)){
-          RowDataArray.removeAt(RowDataArray.value.findIndex((x:any) => x.ColDataArray.length==0));
+      while (true) {
+        if (RowDataArray.value.find((x: any) => x.ColDataArray.length == 0)) {
+          RowDataArray.removeAt(RowDataArray.value.findIndex((x: any) => x.ColDataArray.length == 0));
           continue;
-          }
-          else{
-            break;
-          }
+        }
+        else {
+          break;
+        }
       }
       // ColDataArray.controls.pop();
       // ColDataArray.controls.pop(ColDataArray.value.find(x => x.FieldType == -1))
     }
     return new FormGroup({
-      'ColDataArray': this._formBuilder.array([this.createColIndexFormGroup(fieldType, FieldLable)]),
+      'ColDataArray': this._formBuilder.array([this.createColIndexFormGroup(data)]),
     })
   }
 
-  private createColIndexFormGroup(typeFile: number, FieldLable: string): FormGroup {
+  private createColIndexFormGroup(data: any): FormGroup {
 
     return new FormGroup({
       'FieldValueOne': new FormControl(''),
-      'FieldValueTwo': new FormControl('', Validators.required),
-      'FieldType': new FormControl(typeFile),
-      'FieldLable': new FormControl(FieldLable),
+      'FieldValueTwo': new FormControl(''),
+      'UploadFileValue': new FormControl(),
+      'ArrayOfObjects': new FormControl([]),
+      'FieldType': new FormControl(data.FieldTypeId),
+      'FieldLable': new FormControl(data.FieldLable),
+      'Required': new FormControl(data.Required),
+      'MinLength': new FormControl(data.MinLength),
+      'MaxLength': new FormControl(data.MaxLength),
+      'LowerCase': new FormControl(data.LowerCase),
+      'UpperCase': new FormControl(data.UpperCase),
+      'EmailFormat': new FormControl(data.EmailFormat),
+      'UploadFileTypeId': new FormControl(data.UploadFileTypeId),
+      'Options': new FormControl(data.Options),
+      'RowIndex': new FormControl(data.RowIndex),
+      'ColIndex': new FormControl(data.ColIndex),
+
     })
   }
 
-  public addColFormGroup(RowIndex: number, ColIndex: number, FieldType: number, FieldLable: string) {
+  public addColFormGroup(RowIndex: number, ColIndex: number, FieldType: number, FieldLable: string, Fielddata: any) {
     // const OptionValidation = this.userForm.get('RowDataArray') as FormArray;
     // if (this._utility.hasValue(OptionValidation.value[OptionValidation.length - 1].Option) == false) {
     //   this._utility.AlertWarning("Enter Value for Option " + (OptionValidation.length));
@@ -103,8 +122,19 @@ export class AddEditFormDirectiveComponent implements OnInit {
       const ColDataArray = RowDataArray.controls[RowIndex].get('ColDataArray') as FormArray;
       ColDataArray.controls[ColIndex - 1].patchValue({
         FieldValueOne: '',
-        FieldLable: FieldLable,
-        FieldType: FieldType,
+        FieldValueTwo: '',
+        FieldLable: Fielddata.FieldLable,
+        FieldType: Fielddata.FieldTypeId,
+        Required: Fielddata.Required,
+        MinLength: Fielddata.MinLength,
+        MaxLength: Fielddata.MaxLength,
+        LowerCase: Fielddata.LowerCase,
+        UpperCase: Fielddata.UpperCase,
+        EmailFormat: Fielddata.EmailFormat,
+        UploadFileTypeId: Fielddata.UploadFileTypeId,
+        Options: Fielddata.Options,
+        RowIndex: Fielddata.RowIndex,
+        ColIndex: Fielddata.ColIndex,
       });
       // (this.userForm.get('RowDataArray') as FormArray).controls[ColIndex-1].value.FieldLable = FieldLable;
       // // ColDataArray.controls[ColIndex-1].get('FieldLable')?.valueChanges.subscribe((selectv)=>{
@@ -113,14 +143,29 @@ export class AddEditFormDirectiveComponent implements OnInit {
       // // });
       // (this.userForm.get('RowDataArray') as FormArray).controls[ColIndex-1].value.FieldType = FieldType;
       // // this.cdref.detectChanges();
-      RowDataArray.push(this.createRowIndexFormGroup(0,'Empty',RowIndex));
+      const data = {
+        FieldTypeId: 0,
+        FieldLable: 'Empty',
+      }
+      RowDataArray.push(this.createRowIndexFormGroup(data, RowIndex));
       return;
     }
     const ColDataArray = RowDataArray.controls[RowIndex].get('ColDataArray') as FormArray;
     ColDataArray.controls[ColIndex - 1].patchValue({
       FieldValueOne: '',
-      FieldLable: FieldLable,
-      FieldType: FieldType,
+      FieldValueTwo: '',
+      FieldLable: Fielddata.FieldLable,
+      FieldType: Fielddata.FieldTypeId,
+      Required: Fielddata.Required,
+      MinLength: Fielddata.MinLength,
+      MaxLength: Fielddata.MaxLength,
+      LowerCase: Fielddata.LowerCase,
+      UpperCase: Fielddata.UpperCase,
+      EmailFormat: Fielddata.EmailFormat,
+      UploadFileTypeId: Fielddata.UploadFileTypeId,
+      Options: Fielddata.Options,
+      RowIndex: Fielddata.RowIndex,
+      ColIndex: Fielddata.ColIndex,
     });
     // (RowDataArray.controls[RowIndex].get('ColDataArray') as FormArray).controls[ColIndex-1].patchValue({
     //   FieldValueOne:'hii',
@@ -136,8 +181,12 @@ export class AddEditFormDirectiveComponent implements OnInit {
     //   console.log(selectv);
     // console.log(ColDataArray.value.FieldLable);
     // });
-    // this.cdref.detectChanges();  
-    ColDataArray.push(this.createColIndexFormGroup(0, "Empty"));
+    // this.cdref.detectChanges(); 
+    const data = {
+      FieldTypeId: 0,
+      FieldLable: 'Empty',
+    }
+    ColDataArray.push(this.createColIndexFormGroup(data));
   }
 
   get RowDataFormArray() {
@@ -179,7 +228,7 @@ export class AddEditFormDirectiveComponent implements OnInit {
           data.ColIndex = colIndex + 1;//this.FormColIndex;
           data.RowIndex = rowIndex + 1;//this.FormRowIndex;
 
-          this.addColFormGroup(data.RowIndex - 1, data.ColIndex, data.FieldTypeId, data.FieldLable);
+          this.addColFormGroup(data.RowIndex - 1, data.ColIndex, data.FieldTypeId, data.FieldLable, data);
           // this.FormColIndex += 1;
 
           console.log(data);
@@ -192,12 +241,16 @@ export class AddEditFormDirectiveComponent implements OnInit {
 
     if (colIndex >= 2) {
       const ColDataArray = RowDataArray.controls[rowIndex].get('ColDataArray') as FormArray;
-    ColDataArray.controls[colIndex].patchValue({
-      FieldValueOne: '',
-      FieldLable: 'Leave Label',
-      FieldType: -1,
-    });
-      RowDataArray.push(this.createRowIndexFormGroup(0,'Empty',rowIndex));
+      ColDataArray.controls[colIndex].patchValue({
+        FieldValueOne: '',
+        FieldLable: 'Leave Label',
+        FieldType: -1,
+      });
+      const data = {
+        FieldTypeId: 0,
+        FieldLable: 'Empty',
+      }
+      RowDataArray.push(this.createRowIndexFormGroup(data, rowIndex));
       return;
     }
     const ColDataArray = RowDataArray.controls[rowIndex].get('ColDataArray') as FormArray;
@@ -220,22 +273,75 @@ export class AddEditFormDirectiveComponent implements OnInit {
     //   console.log(selectv);
     // console.log(ColDataArray.value.FieldLable);
     // });
-    // this.cdref.detectChanges();  
-    ColDataArray.push(this.createColIndexFormGroup(0, "Empty"));
+    // this.cdref.detectChanges(); 
+    const data = {
+      FieldTypeId: 0,
+      FieldLable: 'Empty',
+    }
+    ColDataArray.push(this.createColIndexFormGroup(data));
   }
 
 
-  BordersAction(){
-    if(this.bordersView){
-      this.bordersView=false;
+  BordersAction() {
+    if (this.bordersView) {
+      this.bordersView = false;
+    }
+    else {
+      this.bordersView = true;
+    }
+  }
+
+  
+
+
+  selectFile(event: any, rowIndex: number, colIndex: number) {
+    const RowDataArray = this.userForm.get('RowDataArray') as FormArray;
+    const ColDataArray = RowDataArray.controls[rowIndex].get('ColDataArray') as FormArray;
+    ColDataArray.controls[colIndex].patchValue({
+      UploadFileValue: event.target.files[0],
+    });
+
+
+    // this.selectedFiles = event.target.files[0].name;
+  }
+
+  checkBoxChange(event: any, rowIndex: number, colIndex: number, checkedName: string) {
+    const RowDataArray = this.userForm.get('RowDataArray') as FormArray;
+    const ColDataArray = RowDataArray.controls[rowIndex].get('ColDataArray') as FormArray;
+    if (event.checked) {
+      ColDataArray.controls[colIndex].value.ArrayOfObjects.push(checkedName);
     }
     else{
-      this.bordersView=true;
+      ColDataArray.controls[colIndex].patchValue({
+        ArrayOfObjects : ColDataArray.controls[colIndex].value.ArrayOfObjects.filter((x:any) => x != checkedName)
+      });
+      // ColDataArray.controls[colIndex].value.ArrayOfObjects.removeAt(ColDataArray.controls[colIndex].value.ArrayOfObjects.findIndex((x:any)=> x === checkedName));
     }
+    // ColDataArray.controls[colIndex].patchValue({
+    //   ArrayOfObjects : ColDataArray.controls[colIndex].value.ArrayOfObjects.push(checkedName),
+    // });
   }
 
-  ClosePopUp(){
+
+  SaveForm(){
+    console.log(this.userForm.value);
+    this._utility.AlertWarning("Form will not go to live, it will save as draft.");
     this._closeDialog.close();
+  }
+
+  SaveFormAndGoLive(){
+    console.log(this.userForm.value);
+    this._utility.AlertWarning("Form will go to live in 5mins.");
+    this._closeDialog.close();
+  }
+
+  ClosePopUp() {
+    this._closeDialog.close();
+  }
+
+
+  csvInputChange(fileInputEvent: any) {
+    console.log(fileInputEvent.target.files[0]);
   }
 
   Alerttt(y: any) {
