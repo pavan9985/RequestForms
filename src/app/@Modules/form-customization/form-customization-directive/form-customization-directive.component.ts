@@ -11,7 +11,7 @@ export class FormCustomizationDirectiveComponent {
 
   FormsLists : any = [
     {
-      FormName: 'Business Form',
+      FormName: 'Q .net Hiring',
       CreatedDate : '12/12/2022',
       Active: true,
       TotalSubmitions : 79,
@@ -37,7 +37,15 @@ export class FormCustomizationDirectiveComponent {
     {
       FormName: 'Business Form',
       CreatedDate : '12/12/2022',
-      Active: false,
+      Active: true,
+      TotalSubmitions : 79,
+      Config : 'Mail',
+      Pendings : 22
+    },
+    {
+      FormName: 'Business Form',
+      CreatedDate : '12/12/2022',
+      Active: true,
       TotalSubmitions : 79,
       Config : 'Mail',
       Pendings : 22
@@ -53,15 +61,7 @@ export class FormCustomizationDirectiveComponent {
     {
       FormName: 'Business Form',
       CreatedDate : '12/12/2022',
-      Active: false,
-      TotalSubmitions : 79,
-      Config : 'Mail',
-      Pendings : 22
-    },
-    {
-      FormName: 'Business Form',
-      CreatedDate : '12/12/2022',
-      Active: false,
+      Active: true,
       TotalSubmitions : 79,
       Config : 'Mail',
       Pendings : 22
