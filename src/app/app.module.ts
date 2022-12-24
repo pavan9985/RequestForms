@@ -8,6 +8,8 @@ import { MaterialModule } from './Shared/material/material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { UtilityModule } from './Shared/utility/utility.module';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
+import { HttpService } from './Services/http.service';
 
 @NgModule({
   declarations: [
@@ -19,11 +21,12 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
     MaterialModule,
     AppRoutingModule,
     UtilityModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    HttpClientModule
     
   ],
   
-  providers: [{provide: LocationStrategy, useClass: HashLocationStrategy}],
+  providers: [{provide: LocationStrategy, useClass: HashLocationStrategy}, HttpService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

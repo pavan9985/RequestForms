@@ -3,6 +3,7 @@ import {FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validat
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { UserModel } from 'src/app/Models/sign-up-in.model';
+import { HttpService } from 'src/app/Services/http.service';
 import { UtilityModule } from 'src/app/Shared/utility/utility.module';
 import { HomePageDirectiveComponent } from '../../home-page/home-page-directive/home-page-directive.component';
 
@@ -33,7 +34,7 @@ export class SignUpInDirectiveComponent implements OnInit {
    
   sub: any;
   
-  constructor(private _snackBar: MatSnackBar,private route: ActivatedRoute,private nav: Router, private _formBuilder: FormBuilder, private utility : UtilityModule) {
+  constructor(private _snackBar: MatSnackBar,private route: ActivatedRoute,private nav: Router, private _formBuilder: FormBuilder, private utility : UtilityModule,private _httpService:HttpService) {
     this.disbool = true;
     this.userModel ={} as UserModel;
     // console.log(this.dispalay);
@@ -58,11 +59,29 @@ export class SignUpInDirectiveComponent implements OnInit {
       return;
     }
     this.userModel.Email = this.LoginForm.value.Email;
-    this.userModel.Pasword = this.LoginForm.value.Email;
+    this.userModel.Pasword = this.LoginForm.value.Password;
+
+    var req = {
+      userName : this.userModel.Email,
+      password : this.userModel.Pasword
+    }
+    var data :any;
+    this._httpService.Post('User/Login',req,).subscribe(
+      (response) => { 
+        data = response;
+        localStorage.setItem("UserModel", JSON.stringify(this.userModel));
+        console.log(localStorage.getItem("UserModel"));
+        this.nav.navigate(['/Dashboard/UserHome']);
+       },
+      (error) => { 
+        this.utility.AlertWarning(error.error.message);  
+        // error
+       });
+
     // console.log(this.userModel);
-    localStorage.setItem("UserModel", JSON.stringify(this.userModel));
-    console.log(localStorage.getItem("UserModel"));
-    this.nav.navigate(['/Dashboard/UserHome']);
+    // localStorage.setItem("UserModel", JSON.stringify(this.userModel));
+    // console.log(localStorage.getItem("UserModel"));
+    // this.nav.navigate(['/Dashboard/UserHome']);
 }
   
 }
