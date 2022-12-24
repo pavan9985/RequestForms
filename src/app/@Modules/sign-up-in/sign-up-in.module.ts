@@ -6,6 +6,8 @@ import { SignUpInDirectiveComponent } from './sign-up-in-directive/sign-up-in-di
 import { MaterialModule } from 'src/app/Shared/material/material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { UtilityModule } from 'src/app/Shared/utility/utility.module';
+import { LoginGuardGuard } from 'src/app/Services/login-guard.guard';
+import { LoginAuthService } from 'src/app/Services/login-auth.service';
 
 
 @NgModule({
@@ -18,6 +20,7 @@ import { UtilityModule } from 'src/app/Shared/utility/utility.module';
     UtilityModule,
     SignUpInRoutingModule,
     ReactiveFormsModule
-  ]
+  ],
+  providers:[LoginAuthService]
 })
 export class SignUpInModule { }
