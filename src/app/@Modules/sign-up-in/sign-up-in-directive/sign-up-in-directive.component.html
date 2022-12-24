@@ -31,6 +31,7 @@
             </div>
         </div>
         <div *ngIf="!disbool">
+            <form [formGroup]="SignUpForm">
             <div class="row bg-light mt-2 pt-2">
                 <div class="col-xl-5 col-lg-6 col-md-6 col-sm-12 col-xs-12 text-center align-items-center">
                     <h4 class="text-success">Det<i>ails</i> to Sign U<i>p</i></h4> 
@@ -39,27 +40,30 @@
             <div class="row bg-light pb-2">
                 <div class="col-xl-5 col-lg-6 col-md-6 col-sm-12 col-xs-12 text-center align-items-center">
                     <mat-form-field appearance="fill">
-                        <input matInput placeholder="First Name" required>
+                        <input matInput formControlName="FirstName" placeholder="First Name" required>
                     </mat-form-field>
                     <mat-form-field appearance="fill">
-                        <input matInput placeholder="Last name" required>
+                        <input matInput formControlName="LastName" placeholder="Last name" required>
                     </mat-form-field>
                 </div>
                 <div class="row">
                     <div class="col-xl-5 col-lg-6 col-md-6 col-sm-12 col-xs-12 text-center align-items-center">
                         
                         <mat-form-field appearance="fill">
-                            <input matInput placeholder="Email Id" required>
+                            <input matInput formControlName="Email" placeholder="Email Id" required>
+                        </mat-form-field>
+                        <mat-form-field appearance="fill">
+                            <input matInput formControlName="Mobile" placeholder="Mobile Number" required>
                         </mat-form-field><br/>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-xl-5 col-lg-6 col-md-6 col-sm-12 col-xs-12 text-center align-items-center">
                         <mat-form-field appearance="fill">
-                            <input matInput placeholder="Password" required>
+                            <input matInput formControlName="Password" placeholder="Password" required>
                         </mat-form-field>
                         <mat-form-field appearance="fill">
-                            <input matInput placeholder="Confirm Password" required>
+                            <input matInput formControlName="ConfirmPassword" placeholder="Confirm Password" required>
                         </mat-form-field>
                     </div>
                 </div>
@@ -67,30 +71,31 @@
                 <div class="row">
                     <div class="col-xl-5 col-lg-6 col-md-6 col-sm-12 col-xs-12 text-center align-items-center">
                         <mat-form-field appearance="fill">
-                            <mat-select [(value)]="selectedIssue" placeholder="Usage Type" required>
-                            <mat-option *ngFor="let food of foods" [value]="food.value">
-                                {{food.viewValue}}
+                            <mat-select formControlName="UsageType" [(value)]="selectedIssue" placeholder="Usage Type" required>
+                            <mat-option *ngFor="let type of UseAgeType" [value]="type.viewValue">
+                                {{type.viewValue}}
                             </mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
                 </div>
 
-                <div class="row" *ngIf="selectedIssue == '1'">
+                <div class="row" *ngIf="selectedIssue == 'Business'">
                     <div class="col-xl-5 col-lg-6 col-md-6 col-sm-12 col-xs-12 text-center align-items-center">
                         <mat-form-field appearance="fill">
-                            <input matInput placeholder="Bussiness Name" required>
+                            <input matInput formControlName="BusinessName" placeholder="Bussiness Name" required>
                         </mat-form-field>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-xl-5 col-lg-6 col-md-6 col-sm-12 col-xs-12 text-center align-items-center">
-                        <button type="button" class="btn btn-outline-secondary">SignUp</button>
+                        <button type="button" class="btn btn-outline-secondary" (click)="SignUpClick()">SignUp</button>
                         <p class="mt-2 text-primary cursor-pointer"><span (click)="disbool=true">Have an account? Login</span> / <span>Forgot Password?</span></p>
                     </div> 
                 </div>
             </div>  
+        </form>
         </div>
     </div>
 </div> 
