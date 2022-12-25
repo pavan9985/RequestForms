@@ -15,11 +15,11 @@
             <div class="row bg-light pb-2">
                 <div class="col-xl-5 col-lg-6 col-md-6 col-sm-12 col-xs-12 text-center align-items-center">
                     <form [formGroup]="LoginForm">
-                    <mat-form-field>
+                    <mat-form-field appearance="outline">
                         <input matInput  formControlName="Email" placeholder="Email" required>
                     </mat-form-field>
                     <br/>
-                    <mat-form-field appearance="fill">
+                    <mat-form-field appearance="outline">
                         <input matInput formControlName="Password" placeholder="Password" required>
                         
                     </mat-form-field>
@@ -39,30 +39,30 @@
             </div>
             <div class="row bg-light pb-2">
                 <div class="col-xl-5 col-lg-6 col-md-6 col-sm-12 col-xs-12 text-center align-items-center">
-                    <mat-form-field appearance="fill">
+                    <mat-form-field appearance="outline" class="mx-2">
                         <input matInput formControlName="FirstName" placeholder="First Name" required>
                     </mat-form-field>
-                    <mat-form-field appearance="fill">
+                    <mat-form-field appearance="outline">
                         <input matInput formControlName="LastName" placeholder="Last name" required>
                     </mat-form-field>
                 </div>
                 <div class="row">
                     <div class="col-xl-5 col-lg-6 col-md-6 col-sm-12 col-xs-12 text-center align-items-center">
                         
-                        <mat-form-field appearance="fill">
+                        <mat-form-field appearance="outline" class="mx-2">
                             <input matInput formControlName="Email" placeholder="Email Id" required>
                         </mat-form-field>
-                        <mat-form-field appearance="fill">
+                        <mat-form-field appearance="outline">
                             <input matInput formControlName="Mobile" placeholder="Mobile Number" required>
                         </mat-form-field><br/>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-xl-5 col-lg-6 col-md-6 col-sm-12 col-xs-12 text-center align-items-center">
-                        <mat-form-field appearance="fill">
+                        <mat-form-field appearance="outline" class="mx-2">
                             <input matInput formControlName="Password" placeholder="Password" required>
                         </mat-form-field>
-                        <mat-form-field appearance="fill">
+                        <mat-form-field appearance="outline">
                             <input matInput formControlName="ConfirmPassword" placeholder="Confirm Password" required>
                         </mat-form-field>
                     </div>
@@ -70,7 +70,7 @@
 
                 <div class="row">
                     <div class="col-xl-5 col-lg-6 col-md-6 col-sm-12 col-xs-12 text-center align-items-center">
-                        <mat-form-field appearance="fill">
+                        <mat-form-field appearance="outline" class="mx-2">
                             <mat-select formControlName="UsageType" [(value)]="selectedIssue" placeholder="Usage Type" required>
                             <mat-option *ngFor="let type of UseAgeType" [value]="type.viewValue">
                                 {{type.viewValue}}
@@ -82,7 +82,7 @@
 
                 <div class="row" *ngIf="selectedIssue == 'Business'">
                     <div class="col-xl-5 col-lg-6 col-md-6 col-sm-12 col-xs-12 text-center align-items-center">
-                        <mat-form-field appearance="fill">
+                        <mat-form-field appearance="outline">
                             <input matInput formControlName="BusinessName" placeholder="Bussiness Name" required>
                         </mat-form-field>
                     </div>
