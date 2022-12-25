@@ -1,6 +1,7 @@
 export interface UserModel {
+    user_id :number;
+    UserName:string;
     Email : string;
-    Pasword: string;
-    UserId : number;
-    token : string;
+    User_Type:string;
+    Token :string;
 }

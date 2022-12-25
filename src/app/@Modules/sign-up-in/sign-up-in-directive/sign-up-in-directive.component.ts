@@ -75,12 +75,10 @@ export class SignUpInDirectiveComponent implements OnInit {
       this.utility.AlertWarning("Enter Password");
       return;
     }
-    this.userModel.Email = this.LoginForm.value.Email;
-    this.userModel.Pasword = this.LoginForm.value.Password;
 
     var req = {
-      userName : this.userModel.Email,
-      password : this.userModel.Pasword
+      userName : this.LoginForm.value.Email,
+      password : this.LoginForm.value.Password
     }
     var data :any;
 
@@ -101,9 +99,10 @@ export class SignUpInDirectiveComponent implements OnInit {
 
 
     this._httpService.Post('User/Login',req).subscribe(
-      (response) => { 
-        data = response;
-        localStorage.setItem("UserModel", JSON.stringify(this.userModel));
+      (response:any) => { 
+        // data = response;
+        // this.userModel.user_id = response.data.user_id; 
+        localStorage.setItem("UserModel", JSON.stringify(response.data));
         console.log(localStorage.getItem("UserModel"));
         this.IsLogin = true;
         this.nav.navigate(['/Dashboard/UserHome']);
