@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { LoaderService } from './Services/loader.service';
 
 @Component({
   selector: 'app-root',
@@ -9,8 +10,9 @@ import { Router } from '@angular/router';
 export class AppComponent implements OnInit {
   title = 'Request-Forms';
 
-  constructor(private nav: Router){}
+  constructor(private nav: Router, public _loaderService: LoaderService){}
   ngOnInit() {
-    this.nav.navigate(['/HomePage']);
+    // this.nav.navigate(['/HomePage']);
+    // this._loaderService.hide();
    }
 }

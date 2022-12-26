@@ -1,7 +1,25 @@
-<header>
+<!-- <mat-spinner [diameter]="100" *ngIf="_loaderService.visibility | async">
+</mat-spinner> -->
+
+<div class="wrapper" *ngIf="_loaderService.visibility |async">
+  <div class="overlay d-flex justify-content-center align-items-center">
+    <!-- <mat-spinner class="" [diameter]="35">
+    </mat-spinner> -->
+    <div class="spinner-wrapper">
+      <mat-spinner [diameter]="40" color="warn">
+      </mat-spinner>
+    </div>
+  </div>
+
+  <div class="loaded-content" [class.blurred]="_loaderService.visibility|async">
+    <ng-content></ng-content>
+  </div>
+</div>
+<!-- <header *ngIf="(_loaderService.visibility|async) == false"> -->
+  <header >
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
-      <div class="container-fluid">
+    <nav  class="navbar navbar-expand-lg my-0 navbar-light bg-white fixed-top">
+      <div  class="container-fluid">
         <div class="d-block d-lg-none">
             <div class="row">
                 <div class="col-2">
@@ -51,6 +69,7 @@
       </div>
     </nav>
 </header>
+
     <!-- Navbar -->
   
     <!-- Jumbotron -->

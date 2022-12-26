@@ -8,8 +8,10 @@ import { MaterialModule } from './Shared/material/material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { UtilityModule } from './Shared/utility/utility.module';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpService } from './Services/http.service';
+import { LoaderService } from './Services/loader.service';
+import { CustomHttpInterceptorInterceptor } from './Services/custom-http-interceptor.interceptor';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,12 @@ import { HttpService } from './Services/http.service';
     
   ],
   
-  providers: [{provide: LocationStrategy, useClass: HashLocationStrategy}, HttpService],
+  providers: [{provide: LocationStrategy, useClass: HashLocationStrategy}, HttpService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: CustomHttpInterceptorInterceptor,
+      multi: true
+    }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
