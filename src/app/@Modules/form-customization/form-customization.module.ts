@@ -8,6 +8,7 @@ import { AddEditFormDirectiveComponent } from './add-edit-form-directive/add-edi
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormFieldDirectiveComponent } from './form-field-directive/form-field-directive.component';
 import { UtilityModule } from 'src/app/Shared/utility/utility.module';
+import { HttpService } from 'src/app/Services/http.service';
 
 
 @NgModule({
@@ -22,6 +23,7 @@ import { UtilityModule } from 'src/app/Shared/utility/utility.module';
     UtilityModule,
     ReactiveFormsModule,
     FormCustomizationRoutingModule
-  ]
+  ],
+  providers:[HttpService]
 })
 export class FormCustomizationModule { }

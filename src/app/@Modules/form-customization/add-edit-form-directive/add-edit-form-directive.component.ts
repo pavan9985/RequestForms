@@ -2,6 +2,10 @@ import { ChangeDetectorRef, Component, ElementRef, OnInit, Pipe, PipeTransform, 
 import { FormArray, FormBuilder, FormControl, FormControlDirective, FormControlName, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatInput } from '@angular/material/input';
+import { Router } from '@angular/router';
+import { FormCustomize } from 'src/app/Models/form-customize.model';
+import { UserModel } from 'src/app/Models/sign-up-in.model';
+import { HttpService } from 'src/app/Services/http.service';
 import { UtilityModule } from 'src/app/Shared/utility/utility.module';
 import { FormViewDirectiveComponent } from '../../form-view/form-view-directive/form-view-directive.component';
 import { FormFieldDirectiveComponent } from '../form-field-directive/form-field-directive.component';
@@ -37,8 +41,11 @@ export class AddEditFormDirectiveComponent implements OnInit {
   userForm!: FormGroup;
   FormRowIndex: number;
   FormColIndex: number;
+  UserModel: UserModel;
+  userModelstr: any;
 
   ngOnInit() {
+
     const data = {
       FieldTypeId: 0,
       FieldLable: 'Empty',
@@ -51,7 +58,15 @@ export class AddEditFormDirectiveComponent implements OnInit {
     });
   }
 
-  constructor(private _formBuilder: FormBuilder, public _openDialog: MatDialog, public _closeDialog: MatDialogRef<AddEditFormDirectiveComponent>, private _utility: UtilityModule, private cdref: ChangeDetectorRef) {
+  constructor(private _formBuilder: FormBuilder, public _openDialog: MatDialog,
+    public _closeDialog: MatDialogRef<AddEditFormDirectiveComponent>,
+    private _utility: UtilityModule, private cdref: ChangeDetectorRef,
+    private httpService: HttpService, private nav: Router) {
+    this.userModelstr = localStorage.getItem('UserModel');
+    if (this._utility.hasValue(this.userModelstr) == false) {
+      this.nav.navigate(['/SignUpIn/false']);
+    }
+    this.UserModel = JSON.parse(this.userModelstr);
     this.FormRowIndex = 1;
     this.FormColIndex = 1;
 
@@ -292,7 +307,7 @@ export class AddEditFormDirectiveComponent implements OnInit {
     }
   }
 
-  
+
 
 
   selectFile(event: any, rowIndex: number, colIndex: number) {
@@ -312,9 +327,9 @@ export class AddEditFormDirectiveComponent implements OnInit {
     if (event.checked) {
       ColDataArray.controls[colIndex].value.ArrayOfObjects.push(checkedName);
     }
-    else{
+    else {
       ColDataArray.controls[colIndex].patchValue({
-        ArrayOfObjects : ColDataArray.controls[colIndex].value.ArrayOfObjects.filter((x:any) => x != checkedName)
+        ArrayOfObjects: ColDataArray.controls[colIndex].value.ArrayOfObjects.filter((x: any) => x != checkedName)
       });
       // ColDataArray.controls[colIndex].value.ArrayOfObjects.removeAt(ColDataArray.controls[colIndex].value.ArrayOfObjects.findIndex((x:any)=> x === checkedName));
     }
@@ -324,9 +339,9 @@ export class AddEditFormDirectiveComponent implements OnInit {
   }
 
 
-  SaveForm(){
+  SaveForm() {
     console.log(this.userForm.value);
-console.log(this.userForm.value);
+    console.log(this.userForm.value);
     const dialogRefserviceProvidersPage = this._openDialog.open(
       FormViewDirectiveComponent,
       {
@@ -342,10 +357,24 @@ console.log(this.userForm.value);
     this._closeDialog.close();
   }
 
-  SaveFormAndGoLive(){
-    console.log(this.userForm.value);
-    this._utility.AlertWarning("Form will go to live in 5mins.");
-    this._closeDialog.close();
+  SaveFormAndGoLive() {
+    const FormCustomize = {} as FormCustomize;
+    FormCustomize.FormName = this.userForm.value.FormName;
+    FormCustomize.FormObject = JSON.stringify(this.userForm.value);
+    FormCustomize.user_id = this.UserModel.user_id
+
+    this.httpService.Post('Form/SaveFormCustomize',FormCustomize).subscribe(
+      (response:any) => {
+        // data = response;
+        // this.userModel.user_id = response.data.user_id; 
+        this._utility.AlertWarning("Form Saved");
+        this._closeDialog.close();
+       },
+      (error) => { 
+        this._utility.AlertWarning(error.error.message);  
+        // localStorage.removeItem("UserModel");
+        // error
+       });
   }
 
   ClosePopUp() {
