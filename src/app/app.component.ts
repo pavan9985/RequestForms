@@ -12,7 +12,7 @@ export class AppComponent implements OnInit {
 
   constructor(private nav: Router, public _loaderService: LoaderService){}
   ngOnInit() {
-    // this.nav.navigate(['/HomePage']);
+    this.nav.navigate(['/HomePage']);
     // this._loaderService.hide();
    }
 }

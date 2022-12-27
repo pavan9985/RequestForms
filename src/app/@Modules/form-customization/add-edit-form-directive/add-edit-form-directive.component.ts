@@ -358,9 +358,12 @@ export class AddEditFormDirectiveComponent implements OnInit {
   }
 
   SaveFormAndGoLive() {
+    const stringvalue = JSON.stringify(this.userForm.value);
+    const FormData = JSON.parse(stringvalue);
+    FormData.RowDataArray[FormData.RowDataArray.length-1].ColDataArray.pop()
     const FormCustomize = {} as FormCustomize;
     FormCustomize.FormName = this.userForm.value.FormName;
-    FormCustomize.FormObject = JSON.stringify(this.userForm.value);
+    FormCustomize.FormObject = JSON.stringify(FormData);
     FormCustomize.user_id = this.UserModel.user_id
 
     this.httpService.Post('Form/SaveFormCustomize',FormCustomize).subscribe(

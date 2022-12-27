@@ -1,6 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ActivatedRoute } from '@angular/router';
+import { HttpService } from 'src/app/Services/http.service';
 import { UtilityModule } from 'src/app/Shared/utility/utility.module';
 
 @Component({
@@ -11,14 +13,21 @@ import { UtilityModule } from 'src/app/Shared/utility/utility.module';
 export class FormViewDirectiveComponent implements OnInit {
 
   userForm!: FormGroup;
-
+  FormModel:any;
+  _data :any;
+  FormId:number = 0;
   constructor(private _formBuilder: FormBuilder, private _utility: UtilityModule,
-    @Inject(MAT_DIALOG_DATA)
-    public _data: any
+    private _httpService : HttpService, private route: ActivatedRoute
   ) { }
 
   ngOnInit() {
-    if (this._utility.hasValue(this._data) == false) {
+
+    this.route.params.subscribe(params => {
+      var form_id = params['formid'];
+      this.FormId = form_id;
+      });
+    if(this._utility.hasValue(this.FormId) == false || this.FormId <=0){
+      this._utility.AlertWarning("No Such Form.");
       return;
     }
     this.userForm = this._formBuilder.group({
@@ -28,32 +37,39 @@ export class FormViewDirectiveComponent implements OnInit {
       RowDataArray: this._formBuilder.array([]),
     });
 
-    this._data.RowDataArray.forEach((rowItem: any, rowindex: number) => {
-      const RowDataArray = this.userForm.get('RowDataArray') as FormArray;
-      RowDataArray.push(this.createRowIndexFormGroup(rowItem));
-      // rowItem.ColDataArray.forEach((ColItem:any,colIndex:number)=>{
+    this._httpService.Get('Form/GetClientForm?FormId='+this.FormId).subscribe(
+      (response:any) => { 
+        this._data = JSON.parse(response.data.formObject); 
         
+    
+        this._data.RowDataArray.forEach((rowItem: any, rowindex: number) => {
+          const RowDataArray = this.userForm.get('RowDataArray') as FormArray;
+          RowDataArray.push(this.createRowIndexFormGroup(rowItem));
+          // rowItem.ColDataArray.forEach((ColItem:any,colIndex:number)=>{
+    
+          //   // if (rowindex == 0) {
+          //   //   const colArray = (this.userForm.get('RowDataArray') as FormArray).controls[rowindex].get('ColDataArray') as FormArray;
+          //   //   colArray.controls[colIndex].patchValue(
+          //   //     this._data.RowDataArray[rowindex].ColDataArray[colIndex]
+          //   //   )
+          //   // }
+          // })
+          
+        });
+    
+        this.userForm.controls['FormName'].patchValue(this._data.FormName);
+        this.userForm.controls['FormDis'].patchValue(this._data.FormDis);
+       },
+      (error) => { 
+        this._utility.AlertWarning(error.error.message);
+        return;
+        // error
+       });
 
-
-
-
-
-
-
-
-
-      //   // if (rowindex == 0) {
-      //   //   const colArray = (this.userForm.get('RowDataArray') as FormArray).controls[rowindex].get('ColDataArray') as FormArray;
-      //   //   colArray.controls[colIndex].patchValue(
-      //   //     this._data.RowDataArray[rowindex].ColDataArray[colIndex]
-      //   //   )
-      //   // }
-      // })
-      
-    });
-
-    this.userForm.controls['FormName'].patchValue(this._data.FormName);
-    this.userForm.controls['FormDis'].patchValue(this._data.FormDis);
+    if (this._utility.hasValue(this._data) == false) {
+      return;
+    }
+    
     // this.userForm.controls['RowDataArray'](this._data.RowDataArray);
     // this.userForm.value.RowDataArray = this._data.RowDataArray;
 
