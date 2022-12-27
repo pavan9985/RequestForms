@@ -22,6 +22,11 @@ const routes: Routes = [
         loadChildren : () =>
           import('../user-home/user-home.module').then((m) => m.UserHomeModule),
       },
+      {
+        path:'FormView/:formid',
+        loadChildren : () =>
+          import('../form-view/form-view.module').then((m) => m.FormViewModule),
+      },
     ],
   },
 ];
