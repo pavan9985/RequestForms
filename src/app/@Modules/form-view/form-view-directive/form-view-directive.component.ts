@@ -40,7 +40,6 @@ export class FormViewDirectiveComponent implements OnInit {
     this._httpService.Get('Form/GetClientForm?FormId='+this.FormId).subscribe(
       (response:any) => { 
         this._data = JSON.parse(response.data.formObject); 
-        
     
         this._data.RowDataArray.forEach((rowItem: any, rowindex: number) => {
           const RowDataArray = this.userForm.get('RowDataArray') as FormArray;

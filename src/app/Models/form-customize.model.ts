@@ -3,3 +3,10 @@ export interface FormCustomize {
     FormName : string;
     FormObject : string;
 }
+
+export interface FormUpdateCustomize {
+    user_id : number;
+    FormName : string;
+    FormObject : string;
+    formId:number;
+}
