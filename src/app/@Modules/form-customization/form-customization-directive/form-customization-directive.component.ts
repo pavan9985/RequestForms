@@ -129,15 +129,39 @@ export class FormCustomizationDirectiveComponent implements OnInit {
       AddEditFormDirectiveComponent,
       {
         panelClass: "full-screen-dialog",
-        data: {
-
-        }
+        
       }
     );
     dialogRefserviceProvidersPage
       .beforeClosed()
       .subscribe((data) => {
         this.ngOnInit();
+      });
+  }
+
+  EditForm(FormId:number){
+    const dialogRefserviceProvidersPage = this._openDialog.open(
+      AddEditFormDirectiveComponent,
+      {
+        panelClass: "full-screen-dialog",
+        data: FormId
+      }
+    );
+    dialogRefserviceProvidersPage
+      .beforeClosed()
+      .subscribe((data) => {
+        this.ngOnInit();
+      });
+  }
+
+  DeleteForm(formId:number, isActive:boolean){
+    this._httpService.Delete("Form/ActiveDeactiveForm?FormId="+formId+"&IsActive="+!isActive).subscribe(
+      (response:any)=>{
+        this._utility.AlertWarning(response.message);
+        this.ngOnInit();
+      },
+      (error)=>{
+        this._utility.AlertWarning(error.error.message);
       });
   }
 

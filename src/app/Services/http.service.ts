@@ -52,4 +52,20 @@ export class HttpService {
     return this._http.get(this.URL + endPoint, { headers: this.headers });
   }
 
+  Delete(endPoint:any){
+    if (endPoint != "User/Login" && endPoint != "User/SignUp") {
+      this.userModelstr = localStorage.getItem('UserModel');
+
+      if (this._utility.hasValue(this.userModelstr) == false) {
+        this.nav.navigate(['/SignUpIn/false']);
+      }
+      this.UserModel = JSON.parse(this.userModelstr);
+      this.headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.UserModel.token });
+    }
+    else {
+      this.headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    }
+    return this._http.delete(this.URL + endPoint, { headers: this.headers });
+  }
+
 }

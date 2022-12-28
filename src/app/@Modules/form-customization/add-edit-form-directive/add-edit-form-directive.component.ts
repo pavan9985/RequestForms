@@ -1,9 +1,9 @@
-import { ChangeDetectorRef, Component, ElementRef, OnInit, Pipe, PipeTransform, QueryList, ViewChildren } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Inject, OnInit, Pipe, PipeTransform, QueryList, ViewChildren } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormControlDirective, FormControlName, FormGroup, Validators } from '@angular/forms';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatInput } from '@angular/material/input';
 import { Router } from '@angular/router';
-import { FormCustomize } from 'src/app/Models/form-customize.model';
+import { FormCustomize, FormUpdateCustomize } from 'src/app/Models/form-customize.model';
 import { UserModel } from 'src/app/Models/sign-up-in.model';
 import { HttpService } from 'src/app/Services/http.service';
 import { UtilityModule } from 'src/app/Shared/utility/utility.module';
@@ -24,6 +24,7 @@ export class AddEditFormDirectiveComponent implements OnInit {
   RowDataTypes: any = [];
   bordersView: boolean = true;
   selectedFiles: string = '';
+  ComponentState:string;
 
   selectedIssue: any;
   RowArray: any = [];
@@ -43,6 +44,7 @@ export class AddEditFormDirectiveComponent implements OnInit {
   FormColIndex: number;
   UserModel: UserModel;
   userModelstr: any;
+  GetFormData:any;
 
   ngOnInit() {
 
@@ -56,12 +58,54 @@ export class AddEditFormDirectiveComponent implements OnInit {
       FormDis: [''],
       RowDataArray: this._formBuilder.array([this.createRowIndexFormGroup(data, -1)]),
     });
+
+    if(this._utility.hasValue(this.FormId) == false){
+      return;
+    }
+
+    this.httpService.Get('Form/GetClientForm?FormId='+this.FormId).subscribe(
+      (response:any) => {
+        this.GetFormData = JSON.parse(response.data.formObject); 
+        // (((this.userForm.controls['RowDataArray'] as FormArray).controls[0] as FormGroup).controls['ColDataArray'] as FormArray).controls.pop()
+        (this.userForm.controls['RowDataArray'] as FormArray).controls.pop();
+
+        // this.userForm.controls.RowDataArray[0].ColDataArray.pop();
+        const RowDataArray = this.userForm.get('RowDataArray') as FormArray;
+
+        this.GetFormData.RowDataArray.forEach((rowItem: any, rowindex: number) => {
+          RowDataArray.push(this.createRowIndexEditFormGroup(rowItem));
+          // rowItem.ColDataArray.forEach((ColItem:any,colIndex:number)=>{
+    
+          //   // if (rowindex == 0) {
+          //   //   const colArray = (this.userForm.get('RowDataArray') as FormArray).controls[rowindex].get('ColDataArray') as FormArray;
+          //   //   colArray.controls[colIndex].patchValue(
+          //   //     this._data.RowDataArray[rowindex].ColDataArray[colIndex]
+          //   //   )
+          //   // }
+          // })
+          
+        });
+        RowDataArray.push(this.createRowIndexFormGroup(data, -1));
+        this.userForm.controls['FormName'].patchValue(this.GetFormData.FormName);
+        this.userForm.controls['FormDis'].patchValue(this.GetFormData.FormDis);
+      },
+      (error) => {
+        this._utility.AlertWarning(error.error.message);
+        this.nav.navigate(['/Dashboard/FormCustomization']);
+      }
+      )
   }
 
   constructor(private _formBuilder: FormBuilder, public _openDialog: MatDialog,
     public _closeDialog: MatDialogRef<AddEditFormDirectiveComponent>,
     private _utility: UtilityModule, private cdref: ChangeDetectorRef,
-    private httpService: HttpService, private nav: Router) {
+    private httpService: HttpService, private nav: Router,
+    @Inject(MAT_DIALOG_DATA)
+    public FormId: any) {
+      this.ComponentState = 'Save';
+      if(this._utility.hasValue(this.FormId)){
+        this.ComponentState = 'Update';
+      }
     this.userModelstr = localStorage.getItem('UserModel');
     if (this._utility.hasValue(this.userModelstr) == false) {
       this.nav.navigate(['/SignUpIn/false']);
@@ -360,7 +404,12 @@ export class AddEditFormDirectiveComponent implements OnInit {
   SaveFormAndGoLive() {
     const stringvalue = JSON.stringify(this.userForm.value);
     const FormData = JSON.parse(stringvalue);
-    FormData.RowDataArray[FormData.RowDataArray.length-1].ColDataArray.pop()
+    if(FormData.RowDataArray[FormData.RowDataArray.length-1].ColDataArray.length <= 1){
+      FormData.RowDataArray.pop();
+    }
+    else{
+      FormData.RowDataArray[FormData.RowDataArray.length-1].ColDataArray.pop()
+    }
     const FormCustomize = {} as FormCustomize;
     FormCustomize.FormName = this.userForm.value.FormName;
     FormCustomize.FormObject = JSON.stringify(FormData);
@@ -380,9 +429,111 @@ export class AddEditFormDirectiveComponent implements OnInit {
        });
   }
 
+  UpdateForm(){
+    const stringvalue = JSON.stringify(this.userForm.value);
+    const FormData = JSON.parse(stringvalue);
+    if(FormData.RowDataArray[FormData.RowDataArray.length-1].ColDataArray.length <= 1){
+      FormData.RowDataArray.pop();
+    }
+    else{
+      FormData.RowDataArray[FormData.RowDataArray.length-1].ColDataArray.pop()
+    }
+    const FormCustomize = {} as FormUpdateCustomize;
+    FormCustomize.FormName = this.userForm.value.FormName;
+    FormCustomize.FormObject = JSON.stringify(FormData);
+    FormCustomize.user_id = this.UserModel.user_id;
+    FormCustomize.formId = this.FormId;
+
+    this.httpService.Post('Form/UpdateFormCustomize',FormCustomize).subscribe(
+      (response:any) => {
+        // data = response;
+        // this.userModel.user_id = response.data.user_id; 
+        this._utility.AlertWarning("Form Updated");
+        this._closeDialog.close();
+       },
+      (error) => { 
+        this._utility.AlertWarning(error.error.message);  
+        // localStorage.removeItem("UserModel");
+        // error
+       });
+  }
+
   ClosePopUp() {
     this._closeDialog.close();
   }
+
+
+
+
+// Edit Form Part
+
+private createRowIndexEditFormGroup(rowItem:any): FormGroup {
+  // const listFormGroup :Array<FormGroup> =[];
+  // rowItem.ColDataArray.forEach((ColItem:any,colIndex:number)=>{
+  //   listFormGroup.push(
+  //     new FormGroup({
+  //       'ColDataArray': this._formBuilder.array([this.createColIndexFormGroup(ColItem)]),
+  //     })
+  //   )
+  // });
+  // return listFormGroup;
+  return new FormGroup({
+    'ColDataArray': this._formBuilder.array(this.createColIndexEditFormGroup(rowItem)),
+  })
+}
+
+
+private createColIndexEditFormGroup(rowItem:any): Array<FormGroup> {
+  const ColdataArray :Array<FormGroup> = [];
+  rowItem.ColDataArray.forEach((ColItem:any,colIndex:number)=>{
+    ColdataArray.push(
+      new FormGroup({
+        'FieldValueOne': new FormControl(''),
+        'FieldValueTwo': new FormControl(''),
+        'UploadFileValue': new FormControl(),
+        'ArrayOfObjects': new FormControl([]),
+        'FieldType': new FormControl(ColItem.FieldType),
+        'FieldLable': new FormControl(ColItem.FieldLable),
+        'Required': new FormControl(ColItem.Required),
+        'MinLength': new FormControl(ColItem.MinLength),
+        'MaxLength': new FormControl(ColItem.MaxLength),
+        'LowerCase': new FormControl(ColItem.LowerCase),
+        'UpperCase': new FormControl(ColItem.UpperCase),
+        'EmailFormat': new FormControl(ColItem.EmailFormat),
+        'UploadFileTypeId': new FormControl(ColItem.UploadFileTypeId),
+        'Options': new FormControl(ColItem.Options),
+        'RowIndex': new FormControl(ColItem.RowIndex),
+        'ColIndex': new FormControl(ColItem.ColIndex),
+      })
+    )
+  });
+  return ColdataArray;
+
+  // return new FormGroup({
+  //   'FieldValueOne': new FormControl(''),
+  //   'FieldValueTwo': new FormControl(''),
+  //   'UploadFileValue': new FormControl(),
+  //   'ArrayOfObjects': new FormControl([]),
+  //   'FieldType': new FormControl(ColItem.FieldType),
+  //   'FieldLable': new FormControl(ColItem.FieldLable),
+  //   'Required': new FormControl(ColItem.Required),
+  //   'MinLength': new FormControl(ColItem.MinLength),
+  //   'MaxLength': new FormControl(ColItem.MaxLength),
+  //   'LowerCase': new FormControl(ColItem.LowerCase),
+  //   'UpperCase': new FormControl(ColItem.UpperCase),
+  //   'EmailFormat': new FormControl(ColItem.EmailFormat),
+  //   'UploadFileTypeId': new FormControl(ColItem.UploadFileTypeId),
+  //   'Options': new FormControl(ColItem.Options),
+  //   'RowIndex': new FormControl(ColItem.RowIndex),
+  //   'ColIndex': new FormControl(ColItem.ColIndex),
+  // })
+}
+
+
+
+
+
+
 
 
   csvInputChange(fileInputEvent: any) {
