@@ -24,7 +24,7 @@ export class AddEditFormDirectiveComponent implements OnInit {
   RowDataTypes: any = [];
   bordersView: boolean = true;
   selectedFiles: string = '';
-  ComponentState:string;
+  ComponentState: string;
 
   selectedIssue: any;
   RowArray: any = [];
@@ -44,7 +44,7 @@ export class AddEditFormDirectiveComponent implements OnInit {
   FormColIndex: number;
   UserModel: UserModel;
   userModelstr: any;
-  GetFormData:any;
+  GetFormData: any;
 
   ngOnInit() {
 
@@ -59,13 +59,13 @@ export class AddEditFormDirectiveComponent implements OnInit {
       RowDataArray: this._formBuilder.array([this.createRowIndexFormGroup(data, -1)]),
     });
 
-    if(this._utility.hasValue(this.FormId) == false){
+    if (this._utility.hasValue(this.FormId) == false) {
       return;
     }
 
-    this.httpService.Get('Form/GetClientForm?FormId='+this.FormId).subscribe(
-      (response:any) => {
-        this.GetFormData = JSON.parse(response.data.formObject); 
+    this.httpService.Get('Form/GetClientForm?FormId=' + this.FormId).subscribe(
+      (response: any) => {
+        this.GetFormData = JSON.parse(response.data.formObject);
         // (((this.userForm.controls['RowDataArray'] as FormArray).controls[0] as FormGroup).controls['ColDataArray'] as FormArray).controls.pop()
         (this.userForm.controls['RowDataArray'] as FormArray).controls.pop();
 
@@ -75,7 +75,7 @@ export class AddEditFormDirectiveComponent implements OnInit {
         this.GetFormData.RowDataArray.forEach((rowItem: any, rowindex: number) => {
           RowDataArray.push(this.createRowIndexEditFormGroup(rowItem));
           // rowItem.ColDataArray.forEach((ColItem:any,colIndex:number)=>{
-    
+
           //   // if (rowindex == 0) {
           //   //   const colArray = (this.userForm.get('RowDataArray') as FormArray).controls[rowindex].get('ColDataArray') as FormArray;
           //   //   colArray.controls[colIndex].patchValue(
@@ -83,7 +83,7 @@ export class AddEditFormDirectiveComponent implements OnInit {
           //   //   )
           //   // }
           // })
-          
+
         });
         RowDataArray.push(this.createRowIndexFormGroup(data, -1));
         this.userForm.controls['FormName'].patchValue(this.GetFormData.FormName);
@@ -93,7 +93,7 @@ export class AddEditFormDirectiveComponent implements OnInit {
         this._utility.AlertWarning(error.error.message);
         this.nav.navigate(['/Dashboard/FormCustomization']);
       }
-      )
+    )
   }
 
   constructor(private _formBuilder: FormBuilder, public _openDialog: MatDialog,
@@ -102,10 +102,10 @@ export class AddEditFormDirectiveComponent implements OnInit {
     private httpService: HttpService, private nav: Router,
     @Inject(MAT_DIALOG_DATA)
     public FormId: any) {
-      this.ComponentState = 'Save';
-      if(this._utility.hasValue(this.FormId)){
-        this.ComponentState = 'Update';
-      }
+    this.ComponentState = 'Save';
+    if (this._utility.hasValue(this.FormId)) {
+      this.ComponentState = 'Update';
+    }
     this.userModelstr = localStorage.getItem('UserModel');
     if (this._utility.hasValue(this.userModelstr) == false) {
       this.nav.navigate(['/SignUpIn/false']);
@@ -270,9 +270,6 @@ export class AddEditFormDirectiveComponent implements OnInit {
       FormFieldDirectiveComponent,
       {
         panelClass: "view-cart-screen-dialog",
-        data: {
-
-        }
       }
     );
     dialogRefserviceProvidersPage
@@ -404,39 +401,39 @@ export class AddEditFormDirectiveComponent implements OnInit {
   SaveFormAndGoLive() {
     const stringvalue = JSON.stringify(this.userForm.value);
     const FormData = JSON.parse(stringvalue);
-    if(FormData.RowDataArray[FormData.RowDataArray.length-1].ColDataArray.length <= 1){
+    if (FormData.RowDataArray[FormData.RowDataArray.length - 1].ColDataArray.length <= 1) {
       FormData.RowDataArray.pop();
     }
-    else{
-      FormData.RowDataArray[FormData.RowDataArray.length-1].ColDataArray.pop()
+    else {
+      FormData.RowDataArray[FormData.RowDataArray.length - 1].ColDataArray.pop()
     }
     const FormCustomize = {} as FormCustomize;
     FormCustomize.FormName = this.userForm.value.FormName;
     FormCustomize.FormObject = JSON.stringify(FormData);
     FormCustomize.user_id = this.UserModel.user_id
 
-    this.httpService.Post('Form/SaveFormCustomize',FormCustomize).subscribe(
-      (response:any) => {
+    this.httpService.Post('Form/SaveFormCustomize', FormCustomize).subscribe(
+      (response: any) => {
         // data = response;
         // this.userModel.user_id = response.data.user_id; 
         this._utility.AlertWarning("Form Saved");
         this._closeDialog.close();
-       },
-      (error) => { 
-        this._utility.AlertWarning(error.error.message);  
+      },
+      (error) => {
+        this._utility.AlertWarning(error.error.message);
         // localStorage.removeItem("UserModel");
         // error
-       });
+      });
   }
 
-  UpdateForm(){
+  UpdateForm() {
     const stringvalue = JSON.stringify(this.userForm.value);
     const FormData = JSON.parse(stringvalue);
-    if(FormData.RowDataArray[FormData.RowDataArray.length-1].ColDataArray.length <= 1){
+    if (FormData.RowDataArray[FormData.RowDataArray.length - 1].ColDataArray.length <= 1) {
       FormData.RowDataArray.pop();
     }
-    else{
-      FormData.RowDataArray[FormData.RowDataArray.length-1].ColDataArray.pop()
+    else {
+      FormData.RowDataArray[FormData.RowDataArray.length - 1].ColDataArray.pop()
     }
     const FormCustomize = {} as FormUpdateCustomize;
     FormCustomize.FormName = this.userForm.value.FormName;
@@ -444,19 +441,78 @@ export class AddEditFormDirectiveComponent implements OnInit {
     FormCustomize.user_id = this.UserModel.user_id;
     FormCustomize.formId = this.FormId;
 
-    this.httpService.Post('Form/UpdateFormCustomize',FormCustomize).subscribe(
-      (response:any) => {
+    this.httpService.Post('Form/UpdateFormCustomize', FormCustomize).subscribe(
+      (response: any) => {
         // data = response;
         // this.userModel.user_id = response.data.user_id; 
         this._utility.AlertWarning("Form Updated");
         this._closeDialog.close();
-       },
-      (error) => { 
-        this._utility.AlertWarning(error.error.message);  
+      },
+      (error) => {
+        this._utility.AlertWarning(error.error.message);
         // localStorage.removeItem("UserModel");
         // error
-       });
+      });
   }
+
+
+  EditFormFiled(FieldObj: any, rowIndex: number, colIndex: number) {
+
+    if (this._utility.hasValue(this.userForm.value.FormName) == false) {
+      this._utility.AlertWarning("Provide Form Name");
+      // (<any>this.userForm.get('FormName')).nativeElement.focus();
+      // this.cdref.detectChanges();
+      // this.FormFocus.first.focus();
+      return;
+    }
+    FieldObj.FormId = this.FormId;
+    const dialogRefserviceProvidersPage = this._openDialog.open(
+      FormFieldDirectiveComponent,
+      {
+        panelClass: "view-cart-screen-dialog",
+        data: FieldObj
+      }
+    );
+    dialogRefserviceProvidersPage
+      .beforeClosed()
+      .subscribe((data) => {
+        if (data) {
+
+          const RowDataArray = this.userForm.get('RowDataArray') as FormArray;
+          const ColDataArray = RowDataArray.controls[rowIndex].get('ColDataArray') as FormArray;
+          ColDataArray.controls[colIndex].patchValue({
+            FieldValueOne: '',
+            FieldValueTwo: '',
+            FieldLable: data.FieldLable,
+            FieldType: data.FieldTypeId,
+            Required: data.Required,
+            MinLength: data.MinLength,
+            MaxLength: data.MaxLength,
+            LowerCase: data.LowerCase,
+            UpperCase: data.UpperCase,
+            EmailFormat: data.EmailFormat,
+            UploadFileTypeId: data.UploadFileTypeId,
+            Options: data.Options,
+            RowIndex: data.RowIndex,
+            ColIndex: data.ColIndex,
+          });
+
+        }
+      });
+  }
+
+
+  RemoveFormField(rowIndex: number, colIndex: number) {
+    const RowDataArray = this.userForm.get('RowDataArray') as FormArray;
+    const ColDataArray = RowDataArray.controls[rowIndex].get('ColDataArray') as FormArray;
+    if (ColDataArray.length == 1) {
+      RowDataArray.removeAt(rowIndex);
+    }
+    else {
+      ColDataArray.removeAt(colIndex);
+    }
+  }
+
 
   ClosePopUp() {
     this._closeDialog.close();
@@ -465,69 +521,69 @@ export class AddEditFormDirectiveComponent implements OnInit {
 
 
 
-// Edit Form Part
+  // Edit Form Part
 
-private createRowIndexEditFormGroup(rowItem:any): FormGroup {
-  // const listFormGroup :Array<FormGroup> =[];
-  // rowItem.ColDataArray.forEach((ColItem:any,colIndex:number)=>{
-  //   listFormGroup.push(
-  //     new FormGroup({
-  //       'ColDataArray': this._formBuilder.array([this.createColIndexFormGroup(ColItem)]),
-  //     })
-  //   )
-  // });
-  // return listFormGroup;
-  return new FormGroup({
-    'ColDataArray': this._formBuilder.array(this.createColIndexEditFormGroup(rowItem)),
-  })
-}
+  private createRowIndexEditFormGroup(rowItem: any): FormGroup {
+    // const listFormGroup :Array<FormGroup> =[];
+    // rowItem.ColDataArray.forEach((ColItem:any,colIndex:number)=>{
+    //   listFormGroup.push(
+    //     new FormGroup({
+    //       'ColDataArray': this._formBuilder.array([this.createColIndexFormGroup(ColItem)]),
+    //     })
+    //   )
+    // });
+    // return listFormGroup;
+    return new FormGroup({
+      'ColDataArray': this._formBuilder.array(this.createColIndexEditFormGroup(rowItem)),
+    })
+  }
 
 
-private createColIndexEditFormGroup(rowItem:any): Array<FormGroup> {
-  const ColdataArray :Array<FormGroup> = [];
-  rowItem.ColDataArray.forEach((ColItem:any,colIndex:number)=>{
-    ColdataArray.push(
-      new FormGroup({
-        'FieldValueOne': new FormControl(''),
-        'FieldValueTwo': new FormControl(''),
-        'UploadFileValue': new FormControl(),
-        'ArrayOfObjects': new FormControl([]),
-        'FieldType': new FormControl(ColItem.FieldType),
-        'FieldLable': new FormControl(ColItem.FieldLable),
-        'Required': new FormControl(ColItem.Required),
-        'MinLength': new FormControl(ColItem.MinLength),
-        'MaxLength': new FormControl(ColItem.MaxLength),
-        'LowerCase': new FormControl(ColItem.LowerCase),
-        'UpperCase': new FormControl(ColItem.UpperCase),
-        'EmailFormat': new FormControl(ColItem.EmailFormat),
-        'UploadFileTypeId': new FormControl(ColItem.UploadFileTypeId),
-        'Options': new FormControl(ColItem.Options),
-        'RowIndex': new FormControl(ColItem.RowIndex),
-        'ColIndex': new FormControl(ColItem.ColIndex),
-      })
-    )
-  });
-  return ColdataArray;
+  private createColIndexEditFormGroup(rowItem: any): Array<FormGroup> {
+    const ColdataArray: Array<FormGroup> = [];
+    rowItem.ColDataArray.forEach((ColItem: any, colIndex: number) => {
+      ColdataArray.push(
+        new FormGroup({
+          'FieldValueOne': new FormControl(''),
+          'FieldValueTwo': new FormControl(''),
+          'UploadFileValue': new FormControl(),
+          'ArrayOfObjects': new FormControl([]),
+          'FieldType': new FormControl(ColItem.FieldType),
+          'FieldLable': new FormControl(ColItem.FieldLable),
+          'Required': new FormControl(ColItem.Required),
+          'MinLength': new FormControl(ColItem.MinLength),
+          'MaxLength': new FormControl(ColItem.MaxLength),
+          'LowerCase': new FormControl(ColItem.LowerCase),
+          'UpperCase': new FormControl(ColItem.UpperCase),
+          'EmailFormat': new FormControl(ColItem.EmailFormat),
+          'UploadFileTypeId': new FormControl(ColItem.UploadFileTypeId),
+          'Options': new FormControl(ColItem.Options),
+          'RowIndex': new FormControl(ColItem.RowIndex),
+          'ColIndex': new FormControl(ColItem.ColIndex),
+        })
+      )
+    });
+    return ColdataArray;
 
-  // return new FormGroup({
-  //   'FieldValueOne': new FormControl(''),
-  //   'FieldValueTwo': new FormControl(''),
-  //   'UploadFileValue': new FormControl(),
-  //   'ArrayOfObjects': new FormControl([]),
-  //   'FieldType': new FormControl(ColItem.FieldType),
-  //   'FieldLable': new FormControl(ColItem.FieldLable),
-  //   'Required': new FormControl(ColItem.Required),
-  //   'MinLength': new FormControl(ColItem.MinLength),
-  //   'MaxLength': new FormControl(ColItem.MaxLength),
-  //   'LowerCase': new FormControl(ColItem.LowerCase),
-  //   'UpperCase': new FormControl(ColItem.UpperCase),
-  //   'EmailFormat': new FormControl(ColItem.EmailFormat),
-  //   'UploadFileTypeId': new FormControl(ColItem.UploadFileTypeId),
-  //   'Options': new FormControl(ColItem.Options),
-  //   'RowIndex': new FormControl(ColItem.RowIndex),
-  //   'ColIndex': new FormControl(ColItem.ColIndex),
-  // })
-}
+    // return new FormGroup({
+    //   'FieldValueOne': new FormControl(''),
+    //   'FieldValueTwo': new FormControl(''),
+    //   'UploadFileValue': new FormControl(),
+    //   'ArrayOfObjects': new FormControl([]),
+    //   'FieldType': new FormControl(ColItem.FieldType),
+    //   'FieldLable': new FormControl(ColItem.FieldLable),
+    //   'Required': new FormControl(ColItem.Required),
+    //   'MinLength': new FormControl(ColItem.MinLength),
+    //   'MaxLength': new FormControl(ColItem.MaxLength),
+    //   'LowerCase': new FormControl(ColItem.LowerCase),
+    //   'UpperCase': new FormControl(ColItem.UpperCase),
+    //   'EmailFormat': new FormControl(ColItem.EmailFormat),
+    //   'UploadFileTypeId': new FormControl(ColItem.UploadFileTypeId),
+    //   'Options': new FormControl(ColItem.Options),
+    //   'RowIndex': new FormControl(ColItem.RowIndex),
+    //   'ColIndex': new FormControl(ColItem.ColIndex),
+    // })
+  }
 
 
 

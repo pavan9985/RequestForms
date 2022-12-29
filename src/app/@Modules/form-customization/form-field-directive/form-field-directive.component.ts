@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FieldModel } from 'src/app/Models/field-model.model';
 import { UtilityModule } from 'src/app/Shared/utility/utility.module';
 
@@ -208,7 +208,10 @@ export class FormFieldDirectiveComponent implements OnInit {
   CheckBoxRequired: boolean = false;
   FileUploadRequire: boolean = false;
 
-  constructor(private _formBuilder: FormBuilder, private _utility: UtilityModule,public dialogRef: MatDialogRef<FormFieldDirectiveComponent>) {
+  constructor(private _formBuilder: FormBuilder, private _utility: UtilityModule,
+    public dialogRef: MatDialogRef<FormFieldDirectiveComponent>,
+    @Inject(MAT_DIALOG_DATA)
+    public UpdateFormData: any) {
 
   }
 
@@ -224,14 +227,14 @@ export class FormFieldDirectiveComponent implements OnInit {
       TextBoxUpperCase: [false, Validators.required],
       TextAreaRequired: [false, Validators.required],
       TextAreaMinLength: [0, Validators.required],
-      TextAreaMaxLength : [0, Validators.required],
+      TextAreaMaxLength: [0, Validators.required],
       DatePicketRequired: [false, Validators.required],
       DatePicketStartDate: ['', Validators.required],
       DatePicketEndDate: ['', Validators.required],
-      RadioButtonRequired:[false, Validators.required],
-      CheckBoxRequired : [false, Validators.required],
-      UploadFileRequired : [false, Validators.required],
-      UploadFileTypeId :[0, Validators.required],
+      RadioButtonRequired: [false, Validators.required],
+      CheckBoxRequired: [false, Validators.required],
+      UploadFileRequired: [false, Validators.required],
+      UploadFileTypeId: [0, Validators.required],
 
 
       //The part related to the error
@@ -243,6 +246,43 @@ export class FormFieldDirectiveComponent implements OnInit {
       //     })
       // ]
     });
+
+
+    if (this._utility.hasValue(this.UpdateFormData)) {
+      this.InputTypeForm.patchValue({
+        FieldLable: this.UpdateFormData.FieldLable,
+        FieldTypeId: this.UpdateFormData.FieldType,
+        TextBoxEmailFormatCheck: this.UpdateFormData.EmailFormat,
+        TextBoxRequiredCheck: this.UpdateFormData.Required,
+        TextBoxMinLength: this.UpdateFormData.MinLength,
+        TextBoxMaxLength: this.UpdateFormData.MaxLength,
+        TextBoxLowerCase: this.UpdateFormData.LowerCase,
+        TextBoxUpperCase: this.UpdateFormData.UpperCase,
+        TextAreaRequired: this.UpdateFormData.Required,
+        TextAreaMinLength: this.UpdateFormData.MinLength,
+        DatePicketRequired: this.UpdateFormData.Required,
+        DatePicketStartDate: this.UpdateFormData.MinLength,
+        DatePicketEndDate: this.UpdateFormData.MaxLength,
+        RadioButtonRequired: this.UpdateFormData.Required,
+        CheckBoxRequired: this.UpdateFormData.Required,
+        UploadFileRequired: this.UpdateFormData.Required,
+        UploadFileTypeId: this.UpdateFormData.UploadFileTypeId,
+        //radioButtonValue : this.UpdateFormData.Options?.filter((x :any)=> this.createRadioButtonOptionFormGroup(x)),
+        //CheckBoxValues : this.UpdateFormData.Options?.filter((x :any)=> this.createRadioButtonOptionFormGroup(x)),
+      });
+
+      if (this.InputTypeForm.value.FieldTypeId == 4) {
+
+        const radiobtnVlu = this.InputTypeForm.controls['radioButtonValues'] as FormArray;
+        radiobtnVlu.controls.pop();
+        this.UpdateFormData.Options?.forEach((x: any) => radiobtnVlu.push(this.createRadioButtonOptionFormGroup(x.Option)));
+      }
+      if (this.InputTypeForm.value.FieldTypeId == 5) {
+        const checkBoxVlu = this.InputTypeForm.controls['CheckBoxValues'] as FormArray;
+        checkBoxVlu.controls.pop();
+        this.UpdateFormData.Options?.forEach((x: any) => checkBoxVlu.push(this.createRadioButtonOptionFormGroup(x.Option)));
+      }
+    }
   }
   CheckFunctions(event: any, CheckType: string) {
 
@@ -273,14 +313,14 @@ export class FormFieldDirectiveComponent implements OnInit {
     // console.log(event.source.value);
   }
 
-  private createRadioButtonOptionFormGroup(): FormGroup {
+  private createRadioButtonOptionFormGroup(data: string = ''): FormGroup {
     return new FormGroup({
-      'Option': new FormControl('', Validators.required),
+      'Option': new FormControl(data, Validators.required),
     })
   }
-  private createCheckBoxOptionFormGroup(): FormGroup {
+  private createCheckBoxOptionFormGroup(data: string = ''): FormGroup {
     return new FormGroup({
-      'Option': new FormControl('', Validators.required),
+      'Option': new FormControl(data, Validators.required),
     })
   }
 
@@ -341,18 +381,18 @@ export class FormFieldDirectiveComponent implements OnInit {
   }
 
   FormFieldSave() {
-    if (this.selectedFieldType < 1) {
+    if (this.InputTypeForm.value.FieldTypeId < 1) {
       this._utility.AlertWarning("Please Select a Field Type.");
       return;
     }
-    if (this._utility.hasValue(this.InputTypeForm.value.FieldLable)== false) {
+    if (this._utility.hasValue(this.InputTypeForm.value.FieldLable) == false) {
       this._utility.AlertWarning("Field label please");
       return;
     }
 
     const respData = this.BuildObjecFromFormgroup(this.InputTypeForm);
     this.dialogRef.close(respData);
-    
+
 
 
 
@@ -365,47 +405,47 @@ export class FormFieldDirectiveComponent implements OnInit {
 
   private BuildObjecFromFormgroup(formGroup: FormGroup) {
     let FieldModeldata = new FieldModel();
-    
+
     FieldModeldata.FieldTypeId = formGroup.value.FieldTypeId;
-    switch(this.selectedFieldType){
+    switch (formGroup.value.FieldTypeId) {
       case 1:
         FieldModeldata.EmailFormat = formGroup.value.TextBoxEmailFormatCheck;
         FieldModeldata.FieldLable = formGroup.value.FieldLable;
         FieldModeldata.Required = formGroup.value.TextBoxRequiredCheck;
         FieldModeldata.MinLength = formGroup.value.TextBoxMinLength;
         FieldModeldata.MaxLength = formGroup.value.TextBoxMaxLength;
-        FieldModeldata.LowerCase =  formGroup.value.TextBoxLowerCase;
+        FieldModeldata.LowerCase = formGroup.value.TextBoxLowerCase;
         FieldModeldata.UpperCase = formGroup.value.TextBoxUpperCase;
         return FieldModeldata;
       case 2:
-          FieldModeldata.FieldLable = formGroup.value.FieldLable;
-          FieldModeldata.Required = formGroup.value.TextAreaRequired;
-          FieldModeldata.MinLength = formGroup.value.TextAreaMinLength;
-          FieldModeldata.MaxLength = formGroup.value.TextAreaMaxLength;
-          return FieldModeldata;
-          case 3:
-          FieldModeldata.FieldLable = formGroup.value.FieldLable;
-          FieldModeldata.Required = formGroup.value.TextBoxRequiredCheck;
-          FieldModeldata.MinLength = formGroup.value.DatePicketStartDate;
-          FieldModeldata.MaxLength = formGroup.value.DatePicketEndDate;
-          return FieldModeldata;
-          case 4:
-          FieldModeldata.FieldLable = formGroup.value.FieldLable;
-          FieldModeldata.Required = formGroup.value.RadioButtonRequired;
-          FieldModeldata.Options = formGroup.value.radioButtonValues;
-          return FieldModeldata;
-          case 5:
-          FieldModeldata.FieldLable = formGroup.value.FieldLable;
-          FieldModeldata.Required = formGroup.value.CheckBoxRequired;
-          FieldModeldata.Options = formGroup.value.CheckBoxValues;
-          return FieldModeldata;
-          case 6:
-          FieldModeldata.FieldLable = formGroup.value.FieldLable;
-          FieldModeldata.Required = formGroup.value.UploadFileRequired;
-          FieldModeldata.UploadFileTypeId = formGroup.value.UploadFileTypeId;
-          return FieldModeldata;
-          default:
-            return FieldModeldata;
+        FieldModeldata.FieldLable = formGroup.value.FieldLable;
+        FieldModeldata.Required = formGroup.value.TextAreaRequired;
+        FieldModeldata.MinLength = formGroup.value.TextAreaMinLength;
+        FieldModeldata.MaxLength = formGroup.value.TextAreaMaxLength;
+        return FieldModeldata;
+      case 3:
+        FieldModeldata.FieldLable = formGroup.value.FieldLable;
+        FieldModeldata.Required = formGroup.value.TextBoxRequiredCheck;
+        FieldModeldata.MinLength = formGroup.value.DatePicketStartDate;
+        FieldModeldata.MaxLength = formGroup.value.DatePicketEndDate;
+        return FieldModeldata;
+      case 4:
+        FieldModeldata.FieldLable = formGroup.value.FieldLable;
+        FieldModeldata.Required = formGroup.value.RadioButtonRequired;
+        FieldModeldata.Options = formGroup.value.radioButtonValues;
+        return FieldModeldata;
+      case 5:
+        FieldModeldata.FieldLable = formGroup.value.FieldLable;
+        FieldModeldata.Required = formGroup.value.CheckBoxRequired;
+        FieldModeldata.Options = formGroup.value.CheckBoxValues;
+        return FieldModeldata;
+      case 6:
+        FieldModeldata.FieldLable = formGroup.value.FieldLable;
+        FieldModeldata.Required = formGroup.value.UploadFileRequired;
+        FieldModeldata.UploadFileTypeId = formGroup.value.UploadFileTypeId;
+        return FieldModeldata;
+      default:
+        return FieldModeldata;
     }
 
   }
