@@ -17,7 +17,7 @@ export class FormViewDirectiveComponent implements OnInit {
   _data :any;
   FormId:number = 0;
   constructor(private _formBuilder: FormBuilder, private _utility: UtilityModule,
-    private _httpService : HttpService, private route: ActivatedRoute
+    private _httpService : HttpService, private route: ActivatedRoute,
   ) { }
 
   ngOnInit() {

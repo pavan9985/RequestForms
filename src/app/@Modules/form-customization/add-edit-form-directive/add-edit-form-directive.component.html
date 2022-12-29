@@ -190,10 +190,10 @@
                                 <span [hidden]="(y.value.FieldType == 0 || y.value.FieldType==-1)">
                                     <div>
                                         <!-- <button class="btn rounded-circle btn-secondary">Edit</button> -->
-                                        <mat-icon matSuffix class="rounded-circle text-info mx-2">edit</mat-icon>
+                                        <mat-icon matSuffix class="rounded-circle text-info mx-2 cursor-pointer" (click)="EditFormFiled(y.value,rowIndex,colIndex)">edit</mat-icon>
 
                                         <mat-icon matSuffix
-                                            class="rounded-circle text-danger mx-2">remove_circle_outline</mat-icon>
+                                            class="rounded-circle text-danger mx-2" (click)="RemoveFormField(rowIndex,colIndex)">remove_circle_outline</mat-icon>
                                     </div>
                                 </span>
                                 <span [hidden]="!(y.value.FieldType == 0)">
