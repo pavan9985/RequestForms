@@ -33,7 +33,7 @@
                 <div class="d-flex">
                 <span><b>Config :</b>&nbsp;</span>
                 <!-- <mat-icon>star</mat-icon> -->
-                    <span>&nbsp; {{Form.config_Type}} <span style="font-size: small;" class="text-primary cursor-pointer">&nbsp;&nbsp;<u>change</u></span></span>
+                    <span>&nbsp; {{Form.config_Type}} <span style="font-size: small;" class="text-primary cursor-pointer" (click)="ConfigChange(Form.formId)">&nbsp;&nbsp;<u>change</u></span></span>
                 </div>
                 <hr/>
                 <!-- <mat-divider inset></mat-divider> -->

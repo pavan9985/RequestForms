@@ -6,6 +6,7 @@ import { UserModel } from 'src/app/Models/sign-up-in.model';
 import { HttpService } from 'src/app/Services/http.service';
 import { UtilityModule } from 'src/app/Shared/utility/utility.module';
 import { AddEditFormDirectiveComponent } from '../add-edit-form-directive/add-edit-form-directive.component';
+import { FormConfigDirectiveComponent } from '../form-config-directive/form-config-directive.component';
 
 @Component({
   selector: 'app-form-customization-directive',
@@ -162,6 +163,21 @@ export class FormCustomizationDirectiveComponent implements OnInit {
       },
       (error)=>{
         this._utility.AlertWarning(error.error.message);
+      });
+  }
+
+  ConfigChange(FormId:number){
+    const dialogRefserviceProvidersPage = this._openDialog.open(
+      FormConfigDirectiveComponent,
+      {
+        panelClass: "view-cart-screen-dialog",
+        data: FormId
+      }
+    );
+    dialogRefserviceProvidersPage
+      .beforeClosed()
+      .subscribe((data) => {
+        this.ngOnInit();
       });
   }
 
