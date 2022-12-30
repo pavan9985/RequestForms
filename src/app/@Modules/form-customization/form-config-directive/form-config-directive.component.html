@@ -1,0 +1,80 @@
+<div>
+    <div>
+        <div class="row mt-4">
+            <div class="col-12 ms-auto text-center">
+                <h4>Configure your form</h4>
+            </div>
+            <div class="col-12 ms-auto text-center">
+                <span>Check your form configuration before going to live.</span>
+            </div>
+        </div>
+        <hr class="text-dark mx-auto text-center w-75" />
+    </div>
+
+    <div>
+        <div [formGroup]="FormConfig">
+            <div class="row">
+                <div class="col-12 ms-auto text-center">
+                    <mat-form-field appearance="outline">
+                        <mat-select formControlName="ResponseCongigType" placeholder="Config Type" required>
+                            <mat-option *ngFor="let config of ResponseConfigTypes" [value]="config.response_id">
+                                <b>{{config.name}}</b>
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div clas="row">
+                <div class="col-12 ms-auto text-center" *ngIf="this.FormConfig.value.ResponseCongigType > 0 && this.FormConfig.value.ResponseCongigType != 2">
+                    <mat-form-field appearance="outline">
+                        <input matInput formControlName="ResponseCongigSource" placeholder="{{GetRespnseconfigSourceLabe()}}" required>
+                        <!-- <input matInput pattern="^[a-zA-Z0-9]+$" (keypress)="lettersOnly($event)" formControlName="FieldLable" placeholder="Field Lable" required> -->
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row m-2 bg-light">
+                <div class="col-xl-10 col-lg-10 col-md-10 col-sm-12 col-xs-12 ms-auto " *ngIf="this.FormConfig.value.ResponseCongigType>0">
+                    
+                    <div class="">
+                    <h5>Config highlights :</h5>
+
+                    <div class="ms-3 ">
+                        <b>Congif Name: </b>
+                        <span style="font-size:small;">{{GetConfigName()}}</span>
+                        <br/>
+                        <b>Features: </b>
+                        <span style="font-size:small;">{{GetConfigFeatures()}}</span>
+                        <br/>
+                        <b>Note: </b>
+                        <span style="font-size:small;">{{GetConfigNote()}}</span>
+                    </div>
+                    <!-- <mat-list>
+                        <mat-list-item>
+                          <span matListItemTitle>Congif Name</span>
+                          <span >{{GetConfigName()}}</span>
+                        </mat-list-item>
+                        <mat-list-item>
+                          <span matListItemTitle>Features</span>
+                          <span mat-line>{{GetConfigFeatures()}}</span>
+                        </mat-list-item>
+                        <mat-list-item>
+                          <span matListItemTitle>Note</span>
+                          <span >{{GetConfigNote()}}</span>
+                        </mat-list-item>
+                      </mat-list> -->
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <div class="row">
+                <div class="col-12 text-center">
+                    <button class="btn btn-info m-2" (click)="SaveFormConfig()">Save Config</button>
+                    <button class="btn btn-warning" (click)="CancleFormConfigSettings()">Cancle</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

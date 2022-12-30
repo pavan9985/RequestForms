@@ -10,3 +10,10 @@ export interface FormUpdateCustomize {
     FormObject : string;
     formId:number;
 }
+
+
+export interface FormCofigModel {
+    formId : number;
+    formConfigType : number;
+    formConfigSource : string;
+}

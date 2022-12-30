@@ -9,13 +9,15 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { FormFieldDirectiveComponent } from './form-field-directive/form-field-directive.component';
 import { UtilityModule } from 'src/app/Shared/utility/utility.module';
 import { HttpService } from 'src/app/Services/http.service';
+import { FormConfigDirectiveComponent } from './form-config-directive/form-config-directive.component';
 
 
 @NgModule({
   declarations: [
     FormCustomizationDirectiveComponent,
     AddEditFormDirectiveComponent,
-    FormFieldDirectiveComponent
+    FormFieldDirectiveComponent,
+    FormConfigDirectiveComponent
   ],
   imports: [
     CommonModule,
