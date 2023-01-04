@@ -149,6 +149,13 @@
 
         </div>
         </div>
+        <div class="row">
+            <div class="col-12 ms-auto text-center">
+                <button *ngIf="this._data && this.FormId>0" class="btn btn-info ms-2" (click)="SubmitFormResponse()">Submit</button>
+                <button *ngIf="this._data && this.FormId>0" class="btn btn-warning ms-2" (click)="ClearForm()">Clear</button>
+            </div>
+
+        </div>
     </div>
 </div>
 </div>

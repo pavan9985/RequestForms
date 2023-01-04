@@ -155,8 +155,8 @@ export class FormCustomizationDirectiveComponent implements OnInit {
       });
   }
 
-  DeleteForm(formId:number, isActive:boolean){
-    this._httpService.Delete("Form/ActiveDeactiveForm?FormId="+formId+"&IsActive="+!isActive).subscribe(
+  DeleteForm(formId:number, isLive:boolean){
+    this._httpService.Delete("Form/ActiveDeactiveForm?FormId="+formId+"&IsActive="+!isLive).subscribe(
       (response:any)=>{
         this._utility.AlertWarning(response.message);
         this.ngOnInit();

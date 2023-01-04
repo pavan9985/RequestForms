@@ -17,8 +17,8 @@
                 <mat-card-title>
                     {{Form.fromName}} 
                 </mat-card-title>
-                <span class="text-success ms-auto text-end" matSuffix *ngIf="Form.isActive" ><mat-icon matTooltip="Active Form">adjust</mat-icon></span>
-                <span class="text-danger ms-auto text-end" *ngIf="!Form.isActive" ><mat-icon matTooltip="Form not in Use">adjust</mat-icon></span>
+                <span class="text-success ms-auto text-end" matSuffix *ngIf="Form.isLive" ><mat-icon matTooltip="Active Form">adjust</mat-icon></span>
+                <span class="text-danger ms-auto text-end" *ngIf="!Form.isLive" ><mat-icon matTooltip="Form not in Use">adjust</mat-icon></span>
                 <mat-card-subtitle>
                     Created On : <i>{{Form.createdOn}}</i>
                 </mat-card-subtitle>
@@ -40,7 +40,7 @@
                 <mat-card-actions>
                     
                         <button  class="mx-1 btn-info btn" (click)="EditForm(Form.formId)">Edit</button>
-                        <button class="mx-1 btn {{Form.isActive ? 'btn-danger':'btn-success'}}" (click)="DeleteForm(Form.formId,Form.isActive)">{{Form.isActive ? 'Stop':'Go Live'}}</button>
+                        <button class="mx-1 btn {{Form.isLive ? 'btn-danger':'btn-success'}}" (click)="DeleteForm(Form.formId,Form.isLive)">{{Form.isLive ? 'Stop':'Go Live'}}</button>
                         <button class="mx-1 btn btn-warning" (click)="FormPrive(Form.formId)">Form Preview</button>
                     
                 </mat-card-actions>

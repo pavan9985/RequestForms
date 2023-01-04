@@ -174,6 +174,39 @@ export class FormViewDirectiveComponent implements OnInit {
 
   }
 
+  SubmitFormResponse(){
+    if(this._utility.hasValue(this._data) == false || this.FormId <0){
+      
+      return;
+    }
+
+    this._utility.AlertWarning("Working on it.");
+  }
+
+  ClearForm(){
+    // this.userForm.reset();
+    // this.userForm.reset({RowDataArray:[]});
+    // this.userForm.controls['RowDataArray']?.reset([]);
+    const formarray = this.userForm.controls['RowDataArray'] as FormArray;
+    while (formarray.length !== 0) {
+      formarray.removeAt(0)
+    }
+    this._data.RowDataArray.forEach((rowItem: any, rowindex: number) => {
+      const RowDataArray = this.userForm.get('RowDataArray') as FormArray;
+      RowDataArray.push(this.createRowIndexFormGroup(rowItem));
+      // rowItem.ColDataArray.forEach((ColItem:any,colIndex:number)=>{
+
+      //   // if (rowindex == 0) {
+      //   //   const colArray = (this.userForm.get('RowDataArray') as FormArray).controls[rowindex].get('ColDataArray') as FormArray;
+      //   //   colArray.controls[colIndex].patchValue(
+      //   //     this._data.RowDataArray[rowindex].ColDataArray[colIndex]
+      //   //   )
+      //   // }
+      // })
+      
+    });
+  }
+
 
 
 
