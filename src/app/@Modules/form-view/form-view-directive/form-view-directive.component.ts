@@ -180,7 +180,25 @@ export class FormViewDirectiveComponent implements OnInit {
       return;
     }
 
-    this._utility.AlertWarning("Working on it.");
+    const strJson = JSON.stringify(this.userForm.value);
+
+    var obj = {
+      FormName : "",
+      FormObject: strJson
+    }
+
+    this._httpService.Post('ClientForm/ClientFormSubmit',obj).subscribe(
+      (response:any) => { 
+        this._utility.AlertWarning("Working on it.");
+          
+       },
+      (error) => { 
+       
+        // error
+       });
+
+
+    
   }
 
   ClearForm(){
