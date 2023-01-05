@@ -1,7 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormSubmitModel } from 'src/app/Models/form-submit.model';
 import { HttpService } from 'src/app/Services/http.service';
 import { UtilityModule } from 'src/app/Shared/utility/utility.module';
 
@@ -13,11 +14,12 @@ import { UtilityModule } from 'src/app/Shared/utility/utility.module';
 export class FormViewDirectiveComponent implements OnInit {
 
   userForm!: FormGroup;
-  FormModel:any;
-  _data :any;
-  FormId:number = 0;
+  FormModel: any;
+  _data: any;
+  FormId: number = 0;
   constructor(private _formBuilder: FormBuilder, private _utility: UtilityModule,
-    private _httpService : HttpService, private route: ActivatedRoute,
+    private _httpService: HttpService, private route: ActivatedRoute,
+    private nav: Router
   ) { }
 
   ngOnInit() {
@@ -25,8 +27,8 @@ export class FormViewDirectiveComponent implements OnInit {
     this.route.params.subscribe(params => {
       var form_id = params['formid'];
       this.FormId = form_id;
-      });
-    if(this._utility.hasValue(this.FormId) == false || this.FormId <=0){
+    });
+    if (this._utility.hasValue(this.FormId) == false || this.FormId <= 0) {
       this._utility.AlertWarning("No Such Form.");
       return;
     }
@@ -37,15 +39,15 @@ export class FormViewDirectiveComponent implements OnInit {
       RowDataArray: this._formBuilder.array([]),
     });
 
-    this._httpService.Get('Form/GetClientForm?FormId='+this.FormId).subscribe(
-      (response:any) => { 
-        this._data = JSON.parse(response.data.formObject); 
-    
+    this._httpService.Get('Form/GetClientForm?FormId=' + this.FormId).subscribe(
+      (response: any) => {
+        this._data = JSON.parse(response.data.formObject);
+
         this._data.RowDataArray.forEach((rowItem: any, rowindex: number) => {
           const RowDataArray = this.userForm.get('RowDataArray') as FormArray;
           RowDataArray.push(this.createRowIndexFormGroup(rowItem));
           // rowItem.ColDataArray.forEach((ColItem:any,colIndex:number)=>{
-    
+
           //   // if (rowindex == 0) {
           //   //   const colArray = (this.userForm.get('RowDataArray') as FormArray).controls[rowindex].get('ColDataArray') as FormArray;
           //   //   colArray.controls[colIndex].patchValue(
@@ -53,28 +55,28 @@ export class FormViewDirectiveComponent implements OnInit {
           //   //   )
           //   // }
           // })
-          
+
         });
-    
+
         this.userForm.controls['FormName'].patchValue(this._data.FormName);
         this.userForm.controls['FormDis'].patchValue(this._data.FormDis);
-       },
-      (error) => { 
+      },
+      (error) => {
         this._utility.AlertWarning(error.error.message);
         return;
         // error
-       });
+      });
 
     if (this._utility.hasValue(this._data) == false) {
       return;
     }
-    
+
     // this.userForm.controls['RowDataArray'](this._data.RowDataArray);
     // this.userForm.value.RowDataArray = this._data.RowDataArray;
 
   }
 
-  private createRowIndexFormGroup(rowItem:any): FormGroup {
+  private createRowIndexFormGroup(rowItem: any): FormGroup {
     // const listFormGroup :Array<FormGroup> =[];
     // rowItem.ColDataArray.forEach((ColItem:any,colIndex:number)=>{
     //   listFormGroup.push(
@@ -90,9 +92,9 @@ export class FormViewDirectiveComponent implements OnInit {
   }
 
 
-  private createColIndexFormGroup(rowItem:any): Array<FormGroup> {
-    const ColdataArray :Array<FormGroup> = [];
-    rowItem.ColDataArray.forEach((ColItem:any,colIndex:number)=>{
+  private createColIndexFormGroup(rowItem: any): Array<FormGroup> {
+    const ColdataArray: Array<FormGroup> = [];
+    rowItem.ColDataArray.forEach((ColItem: any, colIndex: number) => {
       ColdataArray.push(
         new FormGroup({
           'FieldValueOne': new FormControl(''),
@@ -174,34 +176,33 @@ export class FormViewDirectiveComponent implements OnInit {
 
   }
 
-  SubmitFormResponse(){
-    if(this._utility.hasValue(this._data) == false || this.FormId <0){
-      
+  SubmitFormResponse() {
+    if (this._utility.hasValue(this._data) == false || this.FormId < 0) {
+
       return;
     }
 
     const strJson = JSON.stringify(this.userForm.value);
 
-    var obj = {
-      FormName : "",
-      FormObject: strJson
-    }
+    var FormSubmit = {} as FormSubmitModel;
+    FormSubmit.FormId = Number(this.FormId);
+    FormSubmit.FormObject = strJson;
 
-    this._httpService.Post('ClientForm/ClientFormSubmit',obj).subscribe(
-      (response:any) => { 
-        this._utility.AlertWarning("Working on it.");
-          
-       },
-      (error) => { 
-       
+    this._httpService.Post('ClientForm/ClientFormSubmit', FormSubmit).subscribe(
+      (response: any) => {
+        this._utility.AlertWarning("Form Submited, Check your mail box.");
+        this.nav.navigate(['/Dashboard/FormCustomization']);
+      },
+      (error) => {
+        this._utility.AlertWarning(error.error.message);
         // error
-       });
+      });
 
 
-    
+
   }
 
-  ClearForm(){
+  ClearForm() {
     // this.userForm.reset();
     // this.userForm.reset({RowDataArray:[]});
     // this.userForm.controls['RowDataArray']?.reset([]);
@@ -221,7 +222,7 @@ export class FormViewDirectiveComponent implements OnInit {
       //   //   )
       //   // }
       // })
-      
+
     });
   }
 
