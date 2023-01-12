@@ -19,7 +19,7 @@ export class FormViewDirectiveComponent implements OnInit {
   FormId: number = 0;
   constructor(private _formBuilder: FormBuilder, private _utility: UtilityModule,
     private _httpService: HttpService, private route: ActivatedRoute,
-    private nav: Router
+    private nav: Router,
   ) { }
 
   ngOnInit() {
@@ -224,6 +224,10 @@ export class FormViewDirectiveComponent implements OnInit {
       // })
 
     });
+  }
+
+  Cancle(){
+    this.nav.navigate(['/Dashboard/FormCustomization']);
   }
 
 
