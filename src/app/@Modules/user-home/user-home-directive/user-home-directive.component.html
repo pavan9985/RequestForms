@@ -19,10 +19,10 @@
                     <mat-icon>list_alt</mat-icon>
                 </span>
                 <span>
-                    <h1>6</h1>
+                    <h1>{{this.formCount}}</h1>
                 </span>
                 <span>
-                    <h5>3 forms are active out of 6, look over <span class="text-primary cursor-pointer">Forms</span>.</h5>
+                    <h5>{{this.ActiveFormCount}} forms are active out of {{this.formCount}}, look over <span class="text-primary cursor-pointer" [routerLink]="['/Dashboard/FormCustomization']">Forms</span>.</h5>
                 </span>
             </div>
             <hr class="d-block d-md-none" />
@@ -32,7 +32,7 @@
                     <mat-icon>verified_user</mat-icon>
                 </span>
                 <span>
-                    <h1>1484</h1>
+                    <h1>{{this.TotalFormSubmitionCount}}</h1>
                 </span>
                 <span>
                     <h5>133 forms need to review out of 1484 go to <span class="text-primary cursor-pointer">Review Forms</span>.</h5>
@@ -45,10 +45,10 @@
                     <mat-icon>bar_chart</mat-icon>
                 </span>
                 <span>
-                    <h1>247</h1>
+                    <h1>{{this.AverageFormSubmitionCount}}</h1>
                 </span>
                 <span>
-                    <h5><span class="text-primary cursor-pointer">Continuous FeedBack</span> form has highest number of submitions, count is 458.</h5>
+                    <h5><span class="text-primary cursor-pointer">{{this.HighestSubmitionCountFormName}}</span> form has highest number of submitions, count is {{this.HighestFormSubmitionCount}}.</h5>
                 </span>
             </div>
         </div>
